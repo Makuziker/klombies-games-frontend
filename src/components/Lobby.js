@@ -17,7 +17,7 @@ import Badge from '@material-ui/core/Badge';
 
 import MessageBoard from './MessageBoard/MessageBoard'
 
-/*** MUI EXAMPLE STYLES ***/
+// MUI EXAMPLE STYLES
 
 const drawerWidth = 340;
 
@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
 let socket
 
 const Lobby = ({ location }) => {
-  const ENDPOINT = 'localhost:8080'
+  const ENDPOINT = 'localhost:8080' // where backend is listening
 
   const classes = useStyles()
   const theme = useTheme()
@@ -94,11 +94,16 @@ const Lobby = ({ location }) => {
   const [messages, setMessages] = useState([])
   const [users, setUsers] = useState([])
   const [playingGame, setPlayingGame] = useState(false)
-  const [gameState, setGameState] = useState({})
   const [hand, setHand] = useState([])
   const [groups, setGroups] = useState([])
+  const [currentRound, setCurrentRound] = useState(0)
+  const [playerList, setPlayerList] = useState([])
+  const [currentTurn, setCurrentTurn] = useState(0)
+  const [currentDealer, setCurrentDealer] = useState(0)
+  const [topCardInDiscard, setTopCardInDiscard] = useState({})
 
   useEffect(() => {
+    // temporary - grabbing login info from query params
     const { name, room } = queryString.parse(location.search)
     setName(name)
     setRoom(room)
@@ -129,15 +134,14 @@ const Lobby = ({ location }) => {
   useEffect(() => {
     socket.on('start game', (newGameState) => {
       setPlayingGame(true)
-      setGameState(newGameState)
       console.log(newGameState)
     })
-  }, [playingGame, gameState])
+  }, [playingGame])
 
   useEffect(() => {
     socket.on('update player hand', (newHand) => {
-      setHand(newHand) // confirm that client receives their new hand
-      console.log(hand)
+      setHand(newHand)
+      console.log(newHand)
     })
   }, [hand])
 
