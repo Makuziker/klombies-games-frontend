@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import clsx from 'clsx'
 import queryString from 'query-string'
 import io from 'socket.io-client'
@@ -14,8 +14,11 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Button from '@material-ui/core/Button'
 import ForumIcon from '@material-ui/icons/Forum';
 import Badge from '@material-ui/core/Badge';
+import { useLocation, useParams } from 'react-router-dom';
 
-import MessageBoard from './MessageBoard/MessageBoard'
+import * as Api from '../services/api';
+
+// import MessageBoard from './MessageBoard/MessageBoard'
 
 // MUI EXAMPLE STYLES
 
@@ -79,9 +82,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-let socket
+// let socket;
 
-const Lobby = ({ location }) => {
+export const LobbyPage = () => {
   const ENDPOINT = 'localhost:8080' // where backend is listening
 
   const classes = useStyles()
@@ -102,98 +105,110 @@ const Lobby = ({ location }) => {
   const [currentDealer, setCurrentDealer] = useState(0)
   const [topCardInDiscard, setTopCardInDiscard] = useState({})
 
-  useEffect(() => {
-    // temporary - grabbing login info from query params
-    const { name, room } = queryString.parse(location.search)
-    setName(name)
-    setRoom(room)
+  // const qs = useParams<{ name: string; room: string; }>();
 
-    socket = io(ENDPOINT)
-    socket.emit('join', { name, room }, error => {
-      if (error) alert(error) // TODO ERROR HANDLING
-    })
+  // useEffect(() => {
+  //   setName(qs.name);
+  //   setRoom(qs.room);
+  //   Api.join(qs);
+  // }, [qs]);
 
-    return () => {
-      socket.emit('disconnect')
-      socket.off()
-    }
-  }, [ENDPOINT, location.search])
+  // useEffect(() => {
+  //   // temporary - grabbing login info from query params
+  //   const { name, room } = queryString.parse(location.search)
+  //   setName(name)
+  //   setRoom(room)
 
-  useEffect(() => {
-    socket.on('message', msg => {
-      setMessages([...messages, msg])
-    })
-  }, [messages])
+  //   socket = io(ENDPOINT)
+  //   socket.emit('join', { name, room }, error => {
+  //     if (error) alert(error) // TODO ERROR HANDLING
+  //   })
 
-  useEffect(() => {
-    socket.on('roomData', ({ users }) => {
-      setUsers(users)
-    })
-  }, [users])
+  //   return () => {
+  //     socket.emit('disconnect')
+  //     socket.off()
+  //   }
+  // }, [ENDPOINT, location.search])
 
-  useEffect(() => {
-    socket.on('start game', (newGameState) => {
-      setPlayingGame(true)
-      console.log(newGameState)
-    })
-  }, [playingGame])
+  // useEffect(() => {
+  //   socket.on('message', msg => {
+  //     setMessages([...messages, msg])
+  //   })
+  // }, [messages])
 
-  useEffect(() => {
-    socket.on('update player hand', (newHand) => {
-      setHand(newHand)
-      console.log(newHand)
-    })
-  }, [hand])
+  // useEffect(() => {
+  //   socket.on('roomData', ({ users }) => {
+  //     setUsers(users)
+  //   })
+  // }, [users])
 
-  const sendMessage = event => {
-    event.preventDefault()
-    if (message) {
-      socket.emit('sendMessage', message, error => {
-        if (error) throw new Error(error)
-        setMessage('')
-      })
-    }
-  }
+  // useEffect(() => {
+  //   socket.on('start game', (newGameState) => {
+  //     setPlayingGame(true)
+  //     console.log(newGameState)
+  //   })
+  // }, [playingGame])
 
-  const readyToStart = () => {
-    socket.emit('ready to start', error => {
-      if (error) throw new Error(error)
-      // show 'Waiting for other players...'
-    })
-  }
+  // useEffect(() => {
+  //   socket.on('update player hand', (newHand) => {
+  //     setHand(newHand)
+  //     console.log(newHand)
+  //   })
+  // }, [hand])
 
-  const handleDrawerOpen = () => {
-    setOpenDrawer(true)
-  }
+  // const sendMessage = event => {
+  //   event.preventDefault()
+  //   if (message) {
+  //     socket.emit('sendMessage', message, error => {
+  //       if (error) throw new Error(error)
+  //       setMessage('')
+  //     })
+  //   }
+  // }
 
-  const handleDrawerClose = () => {
-    setOpenDrawer(false)
-  }
+  // const readyToStart = () => {
+  //   socket.emit('ready to start', error => {
+  //     if (error) throw new Error(error)
+  //     // show 'Waiting for other players...'
+  //   })
+  // }
 
-  const drawFromDeck = () => {
-    socket.emit('draw from deck', error => {
-      if (error) console.log(error)
-    })
-  }
+  // const handleDrawerOpen = () => {
+  //   setOpenDrawer(true)
+  // }
 
-  const drawFromDiscard = () => {
-    socket.emit('draw from discard', error => {
-      if (error) console.log(error)
-    })
-  }
+  // const handleDrawerClose = () => {
+  //   setOpenDrawer(false)
+  // }
 
-  const discardFromHand = (card) => {
+  // const drawFromDeck = () => {
+  //   socket.emit('draw from deck', error => {
+  //     if (error) console.log(error)
+  //   })
+  // }
 
-  }
+  // const drawFromDiscard = () => {
+  //   socket.emit('draw from discard', error => {
+  //     if (error) console.log(error)
+  //   })
+  // }
 
-  const goOut = () => {
+  // const discardFromHand = (card) => {
 
-  }
+  // }
+
+  const goOut = useCallback(() => {
+    // TODO
+  }, []);
+
+  const readyToStart = useCallback(() => {
+    // TODO
+  }, []);
 
   // RIPPED FROM MUI EXAMPLE JSX
   return (
     <div className={classes.root}>
-      <AppBar
+      {/* <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
           [classes.appBarShift]: openDrawer,
@@ -215,28 +230,29 @@ const Lobby = ({ location }) => {
             </Badge>
           </IconButton>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: openDrawer,
         })}
       >
         <div className={classes.drawerHeader} />
-        {playingGame
+        <Typography paragraph>
+          Select a game. All members must select the same game to begin playing.
+        </Typography>
+        <Button onClick={readyToStart}>Five Crowns</Button>
+        {/* {playingGame
           ? <>
               <Button onClick={() => drawFromDiscard()}>Draw from Discard</Button>
               <Button onClick={() => drawFromDeck()}>Draw from Deck</Button>
               <Button onClick={() => goOut()}>Go Out</Button>
             </>
           : <>
-              <Typography paragraph>
-                Select a game. All members must select the same game to begin playing.
-              </Typography>
-              <Button onClick={() => readyToStart()}>Five Crowns</Button>
+              
             </>
-        }
+        } */}
       </main>
-      <Drawer
+      {/* <Drawer
         className={classes.drawer}
         variant="persistent"
         anchor="right"
@@ -260,9 +276,7 @@ const Lobby = ({ location }) => {
           sendMessage={sendMessage}
           users={users}
         />
-      </Drawer>
+      </Drawer> */}
     </div>
   )
 }
-
-export default Lobby
