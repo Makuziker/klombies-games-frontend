@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "jsx": "react",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "target": "es5",
+    "types": [
+      "node",
+      "jest"
+    ],
+    "allowJs": true,
+    "strict": true,
+    "module": "esnext",
+    "noEmit": true
+  },
+  "exclude": [
+    "./node_modules",
+    "./dist",
+    "./demo"
+  ],
+  "include": [
+    "src/**/*"
+  ]
+}
