@@ -1,7 +1,9 @@
-import socketIO from 'socket.io-client';
+import { socket } from '../constants';
 
-const ENDPOINT = 'localhost:8080'; // TODO move to env var
-const socket = socketIO(ENDPOINT);
+/**
+ * This file just handles the request made to the server.
+ * For listening for responses from the server, see `containers/ApiInit.tsx`
+ */
 
 type ICallback<R extends {} = {}> = (payload: { error?: string; request?: R; }) => void;
 

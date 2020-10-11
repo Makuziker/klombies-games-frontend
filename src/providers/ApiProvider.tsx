@@ -1,6 +1,7 @@
-import React, { ReactNode, useEffect } from 'react';
+import React, { ReactNode } from 'react';
 import { useDispatch } from 'react-redux';
-import { apiConnect, apiDisconnect } from '../store/api';
+import { SOCKET_IO, ICurrentUserJoinRoomData, currentUserJoinRoom } from '../store';
+import { useSocket } from '../hooks';
 
 export interface IApiProviderProps {
   children: ReactNode;
@@ -9,12 +10,9 @@ export interface IApiProviderProps {
 export function ApiProvider({ children }: IApiProviderProps) {
   const dispatch = useDispatch();
   
-  useEffect(() => {
-    dispatch(apiConnect());
-    return () => {
-      dispatch(apiDisconnect());
-    }
-  }, [dispatch]);
-  
+  useSocket<ICurrentUserJoinRoomData>(SOCKET_IO.ON_CURRENT_USER_JOIN_ROOM, (data) => {
+    dispatch(currentUserJoinRoom(data));
+  });
+
   return <>{children}</>;
 }

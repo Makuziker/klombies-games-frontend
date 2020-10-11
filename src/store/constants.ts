@@ -1,2 +1,2 @@
 export const STATE_KEY_PROCESSING = 'processing';
-export const STATE_KEY_API = 'api';
+export const STATE_KEY_MAIN = 'main';

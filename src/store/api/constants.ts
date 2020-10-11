@@ -9,7 +9,8 @@ export const SOCKET_IO = {
   DRAW_FROM_DISCARD: 'draw from discard',
   DISCARD_FROM_HAND: 'discard from hand',
   UPDATE_PLAYER_HAND: 'update player hand',
-  GO_OUT: 'go out'
+  GO_OUT: 'go out',
+  ON_CURRENT_USER_JOIN_ROOM: 'current_user_join_room'
 };
 
 export const ACTION = {
