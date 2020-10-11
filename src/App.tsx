@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { CssBaseline } from '@material-ui/core';
 
 import { ROUTES } from './constants';
 import { Layout } from './components';
 import { HomePage, LobbyPage, RoomPage, GamePage } from './pages';
-import Providers from './Providers';
+import { Providers } from './providers';
 
 export default function App() {
   return (

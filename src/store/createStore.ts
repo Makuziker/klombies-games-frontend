@@ -6,6 +6,7 @@ import createSagaMiddleware from 'redux-saga';
 import { IApplicationState } from './types';
 import { reducers } from '.';
 import { sagas } from './sagas';
+import { SocketMiddleware as apiMiddleware } from './api';
 
 function* rootSaga() {
   yield all(sagas);
@@ -23,6 +24,7 @@ export default function createStore() {
   const middleware: Middleware[] = [
     ...getDefaultMiddleware(),
     sagaMiddleware,
+    apiMiddleware,
   ];
 
   const store = configureStore({

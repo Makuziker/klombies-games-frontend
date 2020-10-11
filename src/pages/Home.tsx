@@ -4,6 +4,8 @@ import { Grid, Typography, Button, TextField, CircularProgress } from '@material
 
 import { useRoute } from '../hooks';
 import * as Api from '../services/api';
+import { apiJoinRoom } from '../store/api';
+import { useDispatch } from 'react-redux';
 
 export interface IHomePageProps {}
 
@@ -15,11 +17,13 @@ export function HomePage() {
   const history = useHistory();
   const routes = useRoute();
 
+  const dispatch = useDispatch();
+
   const handleSubmit = useCallback((e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      Api.join({ name, room });
+      dispatch(apiJoinRoom({ name, room }));
       history.push(routes.room({ id: room, name }));
     } catch (error) {
       const msg = error.message || error;
@@ -27,7 +31,7 @@ export function HomePage() {
     } finally {
       setLoading(false);
     }
-  }, [room, name, history, routes]);
+  }, [dispatch, name, room, history, routes]);
 
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>, type: 'name' | 'room') => {
     const { value } = event.target;
