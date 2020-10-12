@@ -3,6 +3,7 @@ export interface IMainState {
   roomCode?: string;
 }
 
+// Matches `backend/src/socket/types.ts`
 export interface ICurrentUserJoinRoomData {
   user: {
     id: string;

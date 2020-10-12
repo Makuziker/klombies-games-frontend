@@ -13,8 +13,6 @@ export function* watchCurrentUserJoinRoom() {
       }
     }: PayloadAction<ICurrentUserJoinRoomData> = yield take(currentUserJoinRoom.toString());
 
-    console.log('Inside saga', name, room);
-
     yield put(setDisplayName(name));
     yield put(setRoomCode(room))
   }

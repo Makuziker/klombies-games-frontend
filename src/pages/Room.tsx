@@ -1,16 +1,13 @@
 import { Button, Container, Grid, Typography } from '@material-ui/core';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { Redirect, useHistory, useLocation, useParams } from 'react-router-dom';
-import { ROUTES } from '../constants';
+import { useHistory, useParams } from 'react-router-dom';
 import { useRoute } from '../hooks';
-import { deparam } from '../services/url';
 import { useAppSelectors } from '../store';
 import { IApplicationState } from '../store/types';
 
 export function RoomPage() {
   const { id: roomId } = useParams<{ id: string }>();
-  const location = useLocation();
   const history = useHistory();
   const routes = useRoute();
   const { selectDisplayName, selectRoomCode } = useAppSelectors();
@@ -20,8 +17,10 @@ export function RoomPage() {
     roomCode: selectRoomCode(state),
   }))
 
-  // const name = useMemo(() => deparam<'name'>(location.search).name, [location.search]);
-  const title = useMemo(() => `Welcome ${displayName} to the '${roomCode}' room`, [displayName, roomCode]);
+  const title = useMemo(
+    () => `Welcome ${displayName} to the '${roomCode}' room`,
+    [displayName, roomCode]
+  );
 
   const onClick = useCallback(() => {
     history.push(routes.game({ id: roomId, name: displayName ?? '' }));
