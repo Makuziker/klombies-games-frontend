@@ -1,9 +1,12 @@
 import React, { useState, useCallback, FormEvent, ChangeEvent } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { Grid, Typography, Button, TextField, CircularProgress } from '@material-ui/core'
 
 import { useRoute } from '../hooks';
-import * as Api from '../services/api';
+import { apiJoinRoom } from '../store/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { useAppSelectors } from '../store';
+import { IApplicationState } from '../store/types';
 
 export interface IHomePageProps {}
 
@@ -12,22 +15,29 @@ export function HomePage() {
   const [room, setRoom] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const history = useHistory();
   const routes = useRoute();
+
+  const { selectDisplayName, selectRoomCode } = useAppSelectors();
+
+  const { roomCode, displayName } = useSelector((state: IApplicationState) => ({
+    roomCode: selectRoomCode(state),
+    displayName: selectDisplayName(state)
+  }));
+
+  const dispatch = useDispatch();
 
   const handleSubmit = useCallback((e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      Api.join({ name, room });
-      history.push(routes.room({ id: room, name }));
+      dispatch(apiJoinRoom({ name, room }));
     } catch (error) {
       const msg = error.message || error;
       setErrorMessage(msg);
     } finally {
       setLoading(false);
     }
-  }, [room, name, history, routes]);
+  }, [dispatch, name, room]);
 
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>, type: 'name' | 'room') => {
     const { value } = event.target;
@@ -45,7 +55,9 @@ export function HomePage() {
 
   const renderButtonLabel = useCallback(() => loading ? <CircularProgress /> : 'Join Room', [loading]);
 
-  return (
+  return displayName && roomCode ? (
+    <Redirect push to={routes.room({ id: roomCode, name: displayName })} />
+  ) : (
     <Grid container justify="center">
       <Grid item xs={12} md={4}>
         <Typography>Join a Room</Typography>
