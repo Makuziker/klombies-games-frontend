@@ -1,4 +1,5 @@
 import { socket } from '../constants';
+import { IUser } from '../types'
 
 /**
  * This file just handles the request made to the server.
@@ -23,17 +24,20 @@ export interface IJoinProps {
   room: string;
 }
 
+export interface INewMessageProps {
+  text: string;
+  owner: IUser
+}
+
 export function join({ name, room }: IJoinProps) {
   const callback: ICallback<IJoinProps> = ({ error, request }) => {
     if (error) {
       console.error(error);
-      throw new Error(error);
+      throw new Error(error); // todo handle this more gracefully
     }
-
-    console.log('User joined', request);
   }
 
-  socket.emit('join', { name, room }, callback);
+  socket.emit('JOIN_ROOM', { name, room }, callback);
 
   return () => {
     socket.emit('disconnect');

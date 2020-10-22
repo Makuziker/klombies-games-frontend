@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction, createSelector, createAction } from '@reduxjs/toolkit';
 import { useMemo } from 'react';
 import { STATE_KEY_MAIN } from '../constants';
-import { ICurrentUserJoinRoomData, IMainState } from './types';
+import { ICurrentUserJoinRoomData, IUsersInRoomData, IMainState } from './types';
+import { IUser } from '../../types'
 
 export type MAIN_STATE_SLICE = { [STATE_KEY_MAIN]: IMainState };
 
@@ -12,6 +13,7 @@ const sliceSelector = (state: MAIN_STATE_SLICE) => state[STATE_KEY_MAIN];
 
 export const selectDisplayName = () => createSelector(sliceSelector, ({ displayName }) => displayName);
 export const selectRoomCode = () => createSelector(sliceSelector, ({ roomCode }) => roomCode);
+export const selectUsersInRoom = () => createSelector(sliceSelector, ({ usersInRoom }) => usersInRoom);
 
 export const useMainSelectors = () => ({
   selectDisplayName: useMemo(selectDisplayName, []),
@@ -20,6 +22,8 @@ export const useMainSelectors = () => ({
 
 // Actions
 export const currentUserJoinRoom = createAction<ICurrentUserJoinRoomData>(`${STATE_KEY_MAIN}/currentUserJoinRoom`);
+
+export const usersInRoom = createAction<IUsersInRoomData>(`${STATE_KEY_MAIN}/usersInRoom`);
 
 // Slice
 export const mainSlice = createSlice({
@@ -36,7 +40,13 @@ export const mainSlice = createSlice({
       return {
         ...state,
         roomCode
-      }
+      };
+    },
+    setUsersInRoom(state, { payload: usersInRoom}: PayloadAction<IUser[]>) {
+      return {
+        ...state,
+        usersInRoom
+      };
     }
   }
 });
@@ -44,6 +54,7 @@ export const mainSlice = createSlice({
 export const { reducer: mainReducer } = mainSlice;
 export const {
   setDisplayName,
-  setRoomCode
+  setRoomCode,
+  setUsersInRoom
 } = mainSlice.actions;
 export * from './types';

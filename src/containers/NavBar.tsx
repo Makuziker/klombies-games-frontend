@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from 'react'
-import { AppBar, Toolbar, Badge, Button, makeStyles } from '@material-ui/core'
-import Typography from '@material-ui/core/Typography'
+import React, { useCallback, useState } from 'react';
+import { AppBar, Toolbar, Badge, Button, makeStyles } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import ForumIcon from '@material-ui/icons/Forum';
 import { useRouteMatch } from 'react-router-dom';
+
 import { ROUTES } from '../constants';
 import { ChatPanel } from '../components';
 
@@ -21,7 +22,7 @@ export default function NavBar() {
     exact: true,
     path: ROUTES.home
   });
-  
+
   const classes = useStyles();
 
   const toggleChat = useCallback(() => {
@@ -44,15 +45,7 @@ export default function NavBar() {
           )}
         </Toolbar>
       </AppBar>
-      <ChatPanel
-        open={showChat}
-        name=""
-        messages={[]}
-        inputValue=""
-        users={[]}
-        onInputChange={() => {}}
-        onInputSubmit={() => {}}
-      />
+      <ChatPanel open={showChat} />
     </>
-  )
+  );
 }

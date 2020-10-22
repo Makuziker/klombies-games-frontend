@@ -15,7 +15,7 @@ export function RoomPage() {
   const { displayName, roomCode } = useSelector((state: IApplicationState) => ({
     displayName: selectDisplayName(state),
     roomCode: selectRoomCode(state),
-  }))
+  }));
 
   const title = useMemo(
     () => `Welcome ${displayName} to the '${roomCode}' room`,

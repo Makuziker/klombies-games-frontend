@@ -4,7 +4,7 @@ import { CssBaseline } from '@material-ui/core';
 
 import { ROUTES } from './constants';
 import { Layout } from './components';
-import { HomePage, LobbyPage, RoomPage, GamePage } from './pages';
+import { HomePage, RoomPage, GamePage } from './pages';
 import { Providers } from './providers';
 
 export default function App() {
@@ -15,7 +15,6 @@ export default function App() {
         <Switch>
           <Route path={ROUTES.home} exact component={HomePage} />
           <Route path={ROUTES.room} exact component={RoomPage} />
-          <Route path={ROUTES.lobby} exact component={LobbyPage} />
           <Route path={ROUTES.game} exact component={GamePage} />
         </Switch>
       </Layout>

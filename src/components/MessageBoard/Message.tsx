@@ -24,7 +24,7 @@ export function Message({ message: { owner, text }, name }: IMessageProps) {
       side={isSentByUser ? 'right' : 'left'}
       messages={[message]}
     />
-  )
+  );
 }
 
 

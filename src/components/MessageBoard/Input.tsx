@@ -1,11 +1,9 @@
 import { makeStyles, TextField, Button } from '@material-ui/core';
 import { Send } from '@material-ui/icons';
-import React, { ChangeEvent, FormEvent, useCallback } from 'react'
+import React, { useState, ChangeEvent, FormEvent, useCallback } from 'react'
 
 export interface IMessageInputProps {
-  value: string;
-  onChange(e: ChangeEvent<HTMLInputElement>): void;
-  onSubmit(e: FormEvent): void;
+  onSubmit(text: string): void;
 }
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -14,20 +12,27 @@ const useStyles = makeStyles(({ spacing }) => ({
   }
 }))
 
-export function MessageInput({ value, onChange, onSubmit }: IMessageInputProps) {
+export function MessageInput({ onSubmit }: IMessageInputProps) {
   const classes = useStyles();
+
+  const [text, setText] = useState('')
+
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setText(value)
+  }, []);
 
   const handleSubmit = useCallback((e: FormEvent) => {
     e.preventDefault();
-    onSubmit(e);
-  }, [onSubmit]);
+    onSubmit(text);
+  }, [onSubmit, text]);
 
   return (
     <form onSubmit={handleSubmit}>
       <TextField
         fullWidth
-        value={value}
-        onChange={onChange}
+        value={text}
+        onChange={handleChange}
         variant="outlined"
       />
       <Button
@@ -40,5 +45,5 @@ export function MessageInput({ value, onChange, onSubmit }: IMessageInputProps) 
         <Send />
       </Button>
     </form>
-  )
+  );
 }

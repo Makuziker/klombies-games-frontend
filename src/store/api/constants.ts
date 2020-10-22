@@ -1,20 +1,24 @@
+/**
+ * incoming socket.io events from the server
+ */
 export const SOCKET_IO = {
-  JOIN_ROOM: 'join',
-  MESSAGE: 'message',
-  USER_MESSAGE: 'sendMessage',
-  ROOM_DATA: 'roomData',
-  READY_TO_START: 'ready to start',
-  START_GAME: 'start game',
-  DRAW_FROM_DECK: 'draw from deck',
-  DRAW_FROM_DISCARD: 'draw from discard',
-  DISCARD_FROM_HAND: 'discard from hand',
-  UPDATE_PLAYER_HAND: 'update player hand',
-  GO_OUT: 'go out',
-  ON_CURRENT_USER_JOIN_ROOM: 'current_user_join_room'
+  ON_USERS_IN_ROOM: 'ON_USERS_IN_ROOM',
+  START_GAME: 'START_GAME',
+  ON_CURRENT_USER_JOIN_ROOM: 'ON_CURRENT_USER_JOIN_ROOM'
 };
 
+/**
+ * client-side redux actions - which become socket.io events
+ */
 export const ACTION = {
   ...SOCKET_IO,
   CONNECT: 'API_CONNECT',
+  JOIN_ROOM: 'JOIN_ROOM',
+  MESSAGE: 'MESSAGE',
+  DRAW_FROM_DECK: 'DRAW_FROM_DECK',
+  DRAW_FROM_DISCARD: 'DRAW_FROM_DISCARD',
+  DISCARD_FROM_HAND: 'DISCARD_FROM_HAND',
+  UPDATE_PLAYER_HAND: 'UPDATE_PLAYER_HAND',
+  GO_OUT: 'GO_OUT',
   DISCONNECT: 'API_DISCONNECT',
 };

@@ -29,7 +29,7 @@ export function HomePage() {
   const handleSubmit = useCallback((e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    try {
+    try { // fix this, try catch doesn't catch a silent dispatch fail
       dispatch(apiJoinRoom({ name, room }));
     } catch (error) {
       const msg = error.message || error;

@@ -1,12 +1,12 @@
-export type IIdType = string | number;
-
 export interface IUser {
-  id?: IIdType; // TODO Ideally the model will have this
+  id: string;
   name: string;
+  room: string;
+  readyToStart: boolean;
 }
 
 export interface IMessage {
-  id?: IIdType; // TODO Ideally the model will have this
+  id: string;
   owner: IUser;
   text: string;
 }

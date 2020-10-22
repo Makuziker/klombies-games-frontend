@@ -1,8 +1,8 @@
 import React from 'react';
 import { Drawer, makeStyles, Toolbar } from '@material-ui/core';
-import { ChatContent, IChatContentProps } from './ChatContent';
+import { ChatContent } from './ChatContent';
 
-export interface IChatPanelProps extends IChatContentProps {
+export interface IChatPanelProps {
   open: boolean;
 }
 
@@ -19,7 +19,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }));
 
-export function ChatPanel({ open, ...chatContentProps }: IChatPanelProps) {
+export function ChatPanel({ open }: IChatPanelProps) {
   const classes = useStyles();
 
   return (
@@ -34,7 +34,7 @@ export function ChatPanel({ open, ...chatContentProps }: IChatPanelProps) {
     >
       {/* Move content under navbar */}
       <Toolbar />
-      <ChatContent {...chatContentProps} />
+      <ChatContent />
     </Drawer>
-  )
+  );
 }
