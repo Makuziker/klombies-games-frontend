@@ -13,7 +13,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   content: {
     padding: spacing(2)
   }
-}))
+}));
 
 export function Layout({ children }: ILayoutProps) {
   const classes = useStyles();

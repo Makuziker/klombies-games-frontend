@@ -21,6 +21,9 @@ export const SocketMiddleware: Middleware<{}, IApplicationState> = store => next
     case ACTION.JOIN_ROOM:
       Api.join(action.payload);
       break;
+    case ACTION.MESSAGE:
+      Api.sendMessage(action.payload);
+      break;
     default:
       return next(action);
   }

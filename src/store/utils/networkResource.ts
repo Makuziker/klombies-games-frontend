@@ -1,3 +1,6 @@
+import { socket } from '../../constants';
+import { IUser } from '../../types'
+
 export interface ILoadNetworkResourceError {
   message: string;
   code?: string;
@@ -52,4 +55,10 @@ export function loadResourceError<T extends ILoadNetworkResourceState = ILoadNet
     loadedResource: false,
     loadingResourceError: error
   };
+}
+
+export function findUserById(usersInRoom: IUser[], socketId = socket.id) {
+  const user = usersInRoom.find(u => u.id === socketId) || null;
+  if (!user) throw new Error(`${socketId} is not a user in this room.`);
+  return user;
 }

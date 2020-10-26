@@ -1,5 +1,7 @@
-import { Typography, List, ListItem, ListItemText } from '@material-ui/core';
+import { Typography, List, ListItem, ListItemText, Accordion, AccordionDetails, AccordionSummary } from '@material-ui/core';
 import React from 'react';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import { IUser } from '../../types';
 
 export interface IMessageBoardUsersProps {
@@ -8,15 +10,19 @@ export interface IMessageBoardUsersProps {
 
 export function MessageBoardUsers({ users }: IMessageBoardUsersProps) {
   return (
-    <>
-      <Typography>Users in the Room:</Typography>
-      <List>
-        {users.map((user, i) => (
-          <ListItem key={i}>
-            <ListItemText>{user.name}</ListItemText>
-          </ListItem>
-        ))}
-      </List>
-    </>
+    <Accordion>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography>Users in the Room:</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <List>
+          {users.map((user) => (
+            <ListItem key={user.id}>
+              <ListItemText>{user.name}</ListItemText>
+            </ListItem>
+          ))}
+        </List>
+      </AccordionDetails>
+    </Accordion>
   );
 }

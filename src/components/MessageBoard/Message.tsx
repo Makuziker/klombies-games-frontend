@@ -1,15 +1,15 @@
-import React, { useMemo } from 'react'
+import React, { useMemo } from 'react';
 import { IMessage } from '../../types';
 import { emojify } from 'node-emoji';
-import ChatMsg from '@mui-treasury/components/chatMsg/ChatMsg'
+import ChatMsg from '@mui-treasury/components/chatMsg/ChatMsg';
 
 export interface IMessageProps {
   message: IMessage;
-  name: string;
+  userName: string;
 }
 
-export function Message({ message: { owner, text }, name }: IMessageProps) {
-  const trimmedName = useMemo(() => name.trim().toLowerCase(), [name]);
+export function Message({ message: { owner, text }, userName }: IMessageProps) {
+  const trimmedName = useMemo(() => userName.trim().toLowerCase(), [userName]); // should be sanitizing data way earlier?
   const isSentByUser = useMemo(() => owner.name === trimmedName, [owner.name, trimmedName]);
   const message = useMemo(() => {
     let msg = '';
@@ -26,23 +26,3 @@ export function Message({ message: { owner, text }, name }: IMessageProps) {
     />
   );
 }
-
-
-// const Message = ({ message: { user, text }, name }) => {
-//   let isSentByCurrentUser = false
-//   const trimmedName = name.trim().toLowerCase()
-
-//   if (user === trimmedName) isSentByCurrentUser = true
-
-//   return (
-//     isSentByCurrentUser
-//       ? (
-//         <ChatMsg side={'right'} messages={[emojify(text)]} />
-//       ) : (
-//         <ChatMsg messages={[`${user}: ${emojify(text)}`]} />
-//       )
-//   )
-// }
-
-// export default Message
-

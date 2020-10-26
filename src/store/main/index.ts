@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction, createSelector, createAction } from '@reduxjs/toolkit';
 import { useMemo } from 'react';
 import { STATE_KEY_MAIN } from '../constants';
-import { ICurrentUserJoinRoomData, IUsersInRoomData, IMainState } from './types';
-import { IUser } from '../../types'
+import { ICurrentUserJoinRoomData, IUsersInRoomData, IMainState, IMessageData } from './types';
+import { IUser, IMessage } from '../../types'
 
 export type MAIN_STATE_SLICE = { [STATE_KEY_MAIN]: IMainState };
 
@@ -14,16 +14,21 @@ const sliceSelector = (state: MAIN_STATE_SLICE) => state[STATE_KEY_MAIN];
 export const selectDisplayName = () => createSelector(sliceSelector, ({ displayName }) => displayName);
 export const selectRoomCode = () => createSelector(sliceSelector, ({ roomCode }) => roomCode);
 export const selectUsersInRoom = () => createSelector(sliceSelector, ({ usersInRoom }) => usersInRoom);
+export const selectMessages = () => createSelector(sliceSelector, ({ messages }) => messages);
 
 export const useMainSelectors = () => ({
   selectDisplayName: useMemo(selectDisplayName, []),
-  selectRoomCode: useMemo(selectRoomCode, [])
+  selectRoomCode: useMemo(selectRoomCode, []),
+  selectUsersInRoom: useMemo(selectUsersInRoom, []),
+  selectMessages: useMemo(selectMessages, [])
 });
 
 // Actions
 export const currentUserJoinRoom = createAction<ICurrentUserJoinRoomData>(`${STATE_KEY_MAIN}/currentUserJoinRoom`);
 
 export const usersInRoom = createAction<IUsersInRoomData>(`${STATE_KEY_MAIN}/usersInRoom`);
+
+export const addMessage = createAction<IMessageData>(`${STATE_KEY_MAIN}/addMessage`);
 
 // Slice
 export const mainSlice = createSlice({
@@ -42,11 +47,18 @@ export const mainSlice = createSlice({
         roomCode
       };
     },
-    setUsersInRoom(state, { payload: usersInRoom}: PayloadAction<IUser[]>) {
+    setUsersInRoom(state, { payload: usersInRoom }: PayloadAction<IUser[]>) {
       return {
         ...state,
         usersInRoom
       };
+    },
+    setMessages(state, { payload: message }: PayloadAction<IMessage>) {
+      const messages = state.messages ? state.messages.concat(message) : [message];
+      return {
+        ...state,
+        messages
+      }
     }
   }
 });
@@ -55,6 +67,7 @@ export const { reducer: mainReducer } = mainSlice;
 export const {
   setDisplayName,
   setRoomCode,
-  setUsersInRoom
+  setUsersInRoom,
+  setMessages
 } = mainSlice.actions;
 export * from './types';
