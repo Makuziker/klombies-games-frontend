@@ -10,16 +10,16 @@ import { useAppSelectors, findUserById, apiAddMessage } from '../../store';
 import { IApplicationState } from '../../store/types';
 
 const useStyles = makeStyles(() => ({
-  root: {
+  container: {
     display: 'flex',
-    flexDirection: 'column'
-  },
-  users: {
-    position: 'sticky',
+    flexDirection: 'column',
+    overflow: 'hidden',
+    height: '100%'
   },
   messages: {
+    overflowY: 'auto',
     display: 'flex',
-    flexGrow: 1 // make the frikin messages fill up the space
+    flexGrow: 1
   }
 }));
 
@@ -45,20 +45,18 @@ export function ChatContent() {
   const onInputSubmit = useCallback((text) => {
     dispatch(apiAddMessage({
       text,
-      owner: findUserById(usersInRoom || [])
+      owner: findUserById(usersInRoom ?? [])
     }))
   }, [dispatch, usersInRoom]);
 
   return (
-    <Box className={classes.root}>
-      <div className={classes.users}>
-        <MessageBoardUsers users={usersInRoom || []} />
-      </div>
+    <Box className={classes.container}>
+      <MessageBoardUsers users={usersInRoom ?? []} />
       <Divider />
       <ScrollToBottom className={classes.messages}>
-        {messages ? messages.map(message => (
-          <Message key={message.id} message={message} userName={displayName || ''} />
-        )) : null}
+        {messages?.map(message => (
+          <Message key={message.id} message={message} userName={displayName ?? ''} />
+        ))}
       </ScrollToBottom>
       <MessageInput onSubmit={onInputSubmit} />
     </Box>

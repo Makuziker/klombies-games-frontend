@@ -18,7 +18,9 @@ export function MessageBoardUsers({ users }: IMessageBoardUsersProps) {
         <List>
           {users.map((user) => (
             <ListItem key={user.id}>
-              <ListItemText>{user.name}</ListItemText>
+              <ListItemText>
+                {user.name} - {user.readyToStart ? 'Ready!' : 'Not Ready'}
+              </ListItemText>
             </ListItem>
           ))}
         </List>

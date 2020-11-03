@@ -8,3 +8,5 @@ export const apiDisconnect = createAction(ACTION.DISCONNECT);
 export const apiJoinRoom = createAction<IJoinProps>(ACTION.JOIN_ROOM);
 
 export const apiAddMessage = createAction<INewMessageProps>(ACTION.MESSAGE);
+
+export const apiReadyToStart = createAction(ACTION.READY_TO_START);

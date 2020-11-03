@@ -1,20 +1,24 @@
 import { Button, Container, Grid, Typography } from '@material-ui/core';
 import React, { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
 import { useRoute } from '../hooks';
-import { useAppSelectors } from '../store';
+import { useAppSelectors, apiReadyToStart } from '../store';
 import { IApplicationState } from '../store/types';
 
 export function RoomPage() {
   const { id: roomId } = useParams<{ id: string }>();
-  const history = useHistory();
   const routes = useRoute();
-  const { selectDisplayName, selectRoomCode } = useAppSelectors();
+  const dispatch = useDispatch();
+  const { selectDisplayName, selectRoomCode, selectCurrentUser, selectIsGameInSession } = useAppSelectors();
 
-  const { displayName, roomCode } = useSelector((state: IApplicationState) => ({
+  const { displayName, roomCode, user, isGameInSession } = useSelector((state: IApplicationState) => ({
     displayName: selectDisplayName(state),
     roomCode: selectRoomCode(state),
+    user: selectCurrentUser(state),
+    isGameInSession: selectIsGameInSession(state)
   }));
 
   const title = useMemo(
@@ -23,17 +27,19 @@ export function RoomPage() {
   );
 
   const onClick = useCallback(() => {
-    history.push(routes.game({ id: roomId, name: displayName ?? '' }));
-  }, [displayName, history, roomId, routes]);
+    dispatch(apiReadyToStart());
+  }, [dispatch]);
 
-  return (
-    <Container>
-      <Grid container alignItems="center" direction="column">
-        <Typography variant="h2" component="h1">{title}</Typography>
-        <Typography paragraph>Once all players are ready, click the button to launch the game.</Typography>
-        <Typography paragraph>You can toggle chat at any time by clicking on the icon in the top right corner of the page.</Typography>
-        <Button variant="contained" color="primary" size="large" onClick={onClick}>Launch</Button>
-      </Grid>
-    </Container>
-  );
+  return isGameInSession ? (
+    <Redirect push to={routes.game({ id: roomId, name: displayName ?? '' })} />
+  ) : (
+      <Container>
+        <Grid container alignItems="center" direction="column">
+          <Typography variant="h2" component="h1">{title}</Typography>
+          <Typography paragraph>Click the button when you are ready to start. The game will start when all players are ready.</Typography>
+          <Typography paragraph>You can toggle chat at any time by clicking on the icon in the top right corner of the page.</Typography>
+          <Button variant="contained" color="primary" disabled={user?.readyToStart} size="large" onClick={onClick}>Ready</Button>
+        </Grid>
+      </Container>
+    );
 }

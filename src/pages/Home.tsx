@@ -1,6 +1,6 @@
-import React, { useState, useCallback, FormEvent, ChangeEvent } from 'react'
-import { Redirect } from 'react-router-dom'
-import { Grid, Typography, Button, TextField, CircularProgress } from '@material-ui/core'
+import React, { useState, useCallback, FormEvent, ChangeEvent } from 'react';
+import { Redirect } from 'react-router-dom';
+import { Grid, Typography, Button, TextField, CircularProgress } from '@material-ui/core';
 
 import { useRoute } from '../hooks';
 import { apiJoinRoom } from '../store/api';

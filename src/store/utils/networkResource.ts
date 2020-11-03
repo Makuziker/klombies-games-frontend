@@ -58,7 +58,7 @@ export function loadResourceError<T extends ILoadNetworkResourceState = ILoadNet
 }
 
 export function findUserById(usersInRoom: IUser[], socketId = socket.id) {
-  const user = usersInRoom.find(u => u.id === socketId) || null;
+  const user = usersInRoom.find(u => u.id === socketId);
   if (!user) throw new Error(`${socketId} is not a user in this room.`);
   return user;
 }

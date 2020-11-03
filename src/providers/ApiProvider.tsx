@@ -2,12 +2,14 @@ import React, { ReactNode } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   SOCKET_IO,
-  ICurrentUserJoinRoomData,
   currentUserJoinRoom,
+  ICurrentUserJoinRoomData,
   usersInRoom,
   IUsersInRoomData,
   addMessage,
-  IMessageData
+  IMessageData,
+  startGame,
+  IGameState
 } from '../store';
 import { useSocket } from '../hooks';
 
@@ -28,6 +30,10 @@ export function ApiProvider({ children }: IApiProviderProps) {
 
   useSocket<IMessageData>(SOCKET_IO.ON_MESSAGE, (data) => {
     dispatch(addMessage(data));
+  });
+
+  useSocket<IGameState>(SOCKET_IO.ON_START_GAME, (data) => {
+    dispatch(startGame(data));
   });
 
   return <>{children}</>;

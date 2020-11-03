@@ -4,7 +4,7 @@ import { IUser } from '../types';
 
 /**
  * This file handles the request made to the server.
- * For listening for responses from the server, see `containers/ApiInit.tsx`
+ * For listening for responses from the server, see `providers/ApiProvider.tsx`
  */
 
 export type ICallback<R extends {} = {}> = (payload: { error?: string; request?: R; }) => void;
@@ -46,6 +46,13 @@ export function join({ name, room }: IJoinProps) {
 
 export function sendMessage({ text, owner }: INewMessageProps) {
   socket.emit(ACTION.MESSAGE, { text, owner }, callback);
+  return () => {
+    socket.emit('disconnect');
+  }
+}
+
+export function readyToStart() {
+  socket.emit(ACTION.READY_TO_START, callback);
   return () => {
     socket.emit('disconnect');
   }

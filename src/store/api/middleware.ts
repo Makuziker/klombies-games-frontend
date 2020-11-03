@@ -24,6 +24,9 @@ export const SocketMiddleware: Middleware<{}, IApplicationState> = store => next
     case ACTION.MESSAGE:
       Api.sendMessage(action.payload);
       break;
+    case ACTION.READY_TO_START:
+      Api.readyToStart();
+      break;
     default:
       return next(action);
   }

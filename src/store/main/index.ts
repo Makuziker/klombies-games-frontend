@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction, createSelector, createAction } from '@reduxjs/toolkit';
 import { useMemo } from 'react';
+
 import { STATE_KEY_MAIN } from '../constants';
 import { ICurrentUserJoinRoomData, IUsersInRoomData, IMainState, IMessageData } from './types';
-import { IUser, IMessage } from '../../types'
+import { IUser, IMessage } from '../../types';
+import { socket } from '../../constants';
 
 export type MAIN_STATE_SLICE = { [STATE_KEY_MAIN]: IMainState };
 
@@ -15,12 +17,16 @@ export const selectDisplayName = () => createSelector(sliceSelector, ({ displayN
 export const selectRoomCode = () => createSelector(sliceSelector, ({ roomCode }) => roomCode);
 export const selectUsersInRoom = () => createSelector(sliceSelector, ({ usersInRoom }) => usersInRoom);
 export const selectMessages = () => createSelector(sliceSelector, ({ messages }) => messages);
+export const selectCurrentUser = () => createSelector(sliceSelector, ({ usersInRoom }) => {
+  return usersInRoom && usersInRoom.find(u => u.id === socket.id);
+});
 
 export const useMainSelectors = () => ({
   selectDisplayName: useMemo(selectDisplayName, []),
   selectRoomCode: useMemo(selectRoomCode, []),
   selectUsersInRoom: useMemo(selectUsersInRoom, []),
-  selectMessages: useMemo(selectMessages, [])
+  selectMessages: useMemo(selectMessages, []),
+  selectCurrentUser: useMemo(selectCurrentUser, [])
 });
 
 // Actions
@@ -58,7 +64,7 @@ export const mainSlice = createSlice({
       return {
         ...state,
         messages
-      }
+      };
     }
   }
 });
