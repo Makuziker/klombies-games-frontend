@@ -3,9 +3,13 @@ export interface IGameState {
   currentRound: IRound;
   dealerIdx: number;
   turnIdx: number;
-  topCardInDiscard: ICard;
+  topCardInDiscard?: ICard;
   playerList: string[];
   players: IPlayers;
+}
+
+export interface IPlayerHandData {
+  hand: ICard[];
 }
 
 export interface ICard {

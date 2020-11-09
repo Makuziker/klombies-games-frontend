@@ -60,7 +60,7 @@ export function HomePage() {
   ) : (
     <Grid container justify="center">
       <Grid item xs={12} md={4}>
-        <Typography>Join a Room</Typography>
+        <Typography variant='h3' component='h3'>Join a Room</Typography>
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
@@ -75,7 +75,7 @@ export function HomePage() {
           {errorMessage && (
             <Typography color="error">{errorMessage}</Typography>
           )}
-          <Button fullWidth type="submit" variant="contained" color="secondary" disabled={!room || !name}>
+          <Button fullWidth type="submit" variant="contained" color="secondary" disabled={!room || !name || loading}>
             {renderButtonLabel()}
           </Button>
         </form>

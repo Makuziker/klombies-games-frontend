@@ -8,7 +8,12 @@ import { socket } from '../../constants';
 
 export type MAIN_STATE_SLICE = { [STATE_KEY_MAIN]: IMainState };
 
-const initialState: IMainState = {};
+const initialState: IMainState = {
+  displayName: '',
+  roomCode: '',
+  usersInRoom: [],
+  messages: []
+};
 
 // Selectors
 const sliceSelector = (state: MAIN_STATE_SLICE) => state[STATE_KEY_MAIN];
@@ -16,15 +21,17 @@ const sliceSelector = (state: MAIN_STATE_SLICE) => state[STATE_KEY_MAIN];
 export const selectDisplayName = () => createSelector(sliceSelector, ({ displayName }) => displayName);
 export const selectRoomCode = () => createSelector(sliceSelector, ({ roomCode }) => roomCode);
 export const selectUsersInRoom = () => createSelector(sliceSelector, ({ usersInRoom }) => usersInRoom);
+export const selectNumUsersInRoom = () => createSelector(sliceSelector, ({ usersInRoom }) => usersInRoom.length);
 export const selectMessages = () => createSelector(sliceSelector, ({ messages }) => messages);
 export const selectCurrentUser = () => createSelector(sliceSelector, ({ usersInRoom }) => {
-  return usersInRoom && usersInRoom.find(u => u.id === socket.id);
+  return usersInRoom.find(u => u.id === socket.id);
 });
 
 export const useMainSelectors = () => ({
   selectDisplayName: useMemo(selectDisplayName, []),
   selectRoomCode: useMemo(selectRoomCode, []),
   selectUsersInRoom: useMemo(selectUsersInRoom, []),
+  selectNumUsersInRoom: useMemo(selectNumUsersInRoom, []),
   selectMessages: useMemo(selectMessages, []),
   selectCurrentUser: useMemo(selectCurrentUser, [])
 });
@@ -60,7 +67,7 @@ export const mainSlice = createSlice({
       };
     },
     setMessages(state, { payload: message }: PayloadAction<IMessage>) {
-      const messages = state.messages ? state.messages.concat(message) : [message];
+      const messages = state.messages.concat(message);
       return {
         ...state,
         messages

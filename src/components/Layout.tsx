@@ -8,7 +8,8 @@ export interface ILayoutProps {
 
 const useStyles = makeStyles(({ spacing }) => ({
   root: {
-    display: 'flex'
+    display: 'flex',
+    width: '100%'
   },
   content: {
     padding: spacing(2)

@@ -1,10 +1,10 @@
 import { IUser, IMessage } from '../../types';
 
 export interface IMainState {
-  displayName?: string;
-  roomCode?: string;
-  usersInRoom?: IUser[];
-  messages?: IMessage[];
+  displayName: string;
+  roomCode: string;
+  usersInRoom: IUser[];
+  messages: IMessage[];
 }
 
 // Matches `backend/src/socket/types.ts`

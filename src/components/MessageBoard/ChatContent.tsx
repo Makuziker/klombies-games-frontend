@@ -45,17 +45,17 @@ export function ChatContent() {
   const onInputSubmit = useCallback((text) => {
     dispatch(apiAddMessage({
       text,
-      owner: findUserById(usersInRoom ?? [])
+      owner: findUserById(usersInRoom)
     }))
   }, [dispatch, usersInRoom]);
 
   return (
     <Box className={classes.container}>
-      <MessageBoardUsers users={usersInRoom ?? []} />
+      <MessageBoardUsers users={usersInRoom} />
       <Divider />
       <ScrollToBottom className={classes.messages}>
         {messages?.map(message => (
-          <Message key={message.id} message={message} userName={displayName ?? ''} />
+          <Message key={message.id} message={message} userName={displayName} />
         ))}
       </ScrollToBottom>
       <MessageInput onSubmit={onInputSubmit} />

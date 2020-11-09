@@ -9,10 +9,6 @@ export interface IChatPanelProps {
 const drawerWidth = 340;
 
 const useStyles = makeStyles(({ spacing }) => ({
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
   drawerPaper: {
     width: drawerWidth,
     padding: spacing(1)
@@ -24,7 +20,6 @@ export function ChatPanel({ open }: IChatPanelProps) {
 
   return (
     <Drawer
-      className={classes.drawer}
       variant="persistent"
       anchor="right"
       open={open}

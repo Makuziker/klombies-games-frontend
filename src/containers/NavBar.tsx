@@ -17,7 +17,7 @@ const useStyles = makeStyles(({ zIndex }) => ({
 }));
 
 export default function NavBar() {
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(true);
   const isHomePage = useRouteMatch({
     exact: true,
     path: ROUTES.home
@@ -45,7 +45,7 @@ export default function NavBar() {
           )}
         </Toolbar>
       </AppBar>
-      <ChatPanel open={showChat} />
+      <ChatPanel open={showChat && !isHomePage} />
     </>
   );
 }

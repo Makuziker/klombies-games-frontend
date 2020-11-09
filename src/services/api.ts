@@ -1,4 +1,5 @@
 import { socket } from '../constants';
+import { ICard } from '../store';
 import { ACTION } from '../store/api/constants';
 import { IUser } from '../types';
 
@@ -19,10 +20,18 @@ export interface INewMessageProps {
   owner: IUser
 }
 
+export interface IDiscardFromHandProps {
+  card: ICard;
+}
+
+export interface IGoOutProps {
+  groups: ICard[][];
+  discard: ICard;
+}
+
 const callback: ICallback = ({ error, request }) => {
   if (error) {
     console.error(error, request);
-    throw new Error(error); // todo handle this more gracefully
   }
 }
 
@@ -53,6 +62,34 @@ export function sendMessage({ text, owner }: INewMessageProps) {
 
 export function readyToStart() {
   socket.emit(ACTION.READY_TO_START, callback);
+  return () => {
+    socket.emit('disconnect');
+  }
+}
+
+export function drawFromDeck() {
+  socket.emit(ACTION.DRAW_FROM_DECK, callback);
+  return () => {
+    socket.emit('disconnect');
+  }
+}
+
+export function drawFromDiscard() {
+  socket.emit(ACTION.DRAW_FROM_DISCARD, callback);
+  return () => {
+    socket.emit('disconnect');
+  }
+}
+
+export function discardFromHand({ card }: IDiscardFromHandProps) {
+  socket.emit(ACTION.DISCARD_FROM_HAND, { card }, callback);
+  return () => {
+    socket.emit('disconnect');
+  }
+}
+
+export function goOut({ groups, discard }: IGoOutProps) {
+  socket.emit(ACTION.GO_OUT, { groups, discard }, callback);
   return () => {
     socket.emit('disconnect');
   }

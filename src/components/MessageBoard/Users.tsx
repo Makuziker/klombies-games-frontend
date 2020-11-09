@@ -10,7 +10,7 @@ export interface IMessageBoardUsersProps {
 
 export function MessageBoardUsers({ users }: IMessageBoardUsersProps) {
   return (
-    <Accordion>
+    <Accordion defaultExpanded={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography>Users in the Room:</Typography>
       </AccordionSummary>

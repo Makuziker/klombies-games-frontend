@@ -1,8 +1,8 @@
-import { createSelector, createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createAction, createSlice, createReducer, PayloadAction } from '@reduxjs/toolkit';
 import { useMemo } from 'react';
 
 import { STATE_KEY_GAME } from '../constants';
-import { IGameState } from './types';
+import { IGameState, IPlayerHandData } from './types';
 import { socket } from '../../constants';
 
 export type GAME_STATE_SLICE = { [STATE_KEY_GAME]: IGameState };
@@ -27,6 +27,7 @@ export const selectCurrentRound = () => createSelector(sliceSelector, ({ current
 export const selectDealerIdx = () => createSelector(sliceSelector, ({ dealerIdx }) => dealerIdx);
 export const selectTurnIdx = () => createSelector(sliceSelector, ({ turnIdx }) => turnIdx);
 export const selectTopCardInDiscard = () => createSelector(sliceSelector, ({ topCardInDiscard }) => topCardInDiscard);
+export const selectPlayerList = () => createSelector(sliceSelector, ({ playerList }) => playerList);
 
 export const useGameSelectors = () => ({
   selectGameState: useMemo(selectGameState, []),
@@ -35,11 +36,14 @@ export const useGameSelectors = () => ({
   selectCurrentRound: useMemo(selectCurrentRound, []),
   selectDealerIdx: useMemo(selectDealerIdx, []),
   selectTurnIdx: useMemo(selectTurnIdx, []),
-  selectTopCardInDiscard: useMemo(selectTopCardInDiscard, [])
+  selectTopCardInDiscard: useMemo(selectTopCardInDiscard, []),
+  selectPlayerList: useMemo(selectPlayerList, [])
 });
 
 // actions
 export const startGame = createAction<IGameState>(`${STATE_KEY_GAME}/startGame`);
+export const updateGameState = createAction<IGameState>(`${STATE_KEY_GAME}/updateGameState`);
+export const updatePlayerHand = createAction<IPlayerHandData>(`${STATE_KEY_GAME}/updatePlayerHand`);
 
 // slice
 export const gameSlice = createSlice({
@@ -66,6 +70,11 @@ export const gameSlice = createSlice({
         topCardInDiscard,
         playerList,
         players
+      }
+    },
+    setPlayerHand(state, { payload: { hand }}: PayloadAction<IPlayerHandData>) {
+      return {
+        ...state
       }
     }
   }

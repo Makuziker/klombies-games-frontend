@@ -9,7 +9,10 @@ import {
   addMessage,
   IMessageData,
   startGame,
-  IGameState
+  IGameState,
+  updateGameState,
+  updatePlayerHand,
+  IPlayerHandData
 } from '../store';
 import { useSocket } from '../hooks';
 
@@ -34,6 +37,14 @@ export function ApiProvider({ children }: IApiProviderProps) {
 
   useSocket<IGameState>(SOCKET_IO.ON_START_GAME, (data) => {
     dispatch(startGame(data));
+  });
+
+  useSocket<IGameState>(SOCKET_IO.ON_UPDATE_GAME_STATE, (data) => {
+    dispatch(updateGameState(data));
+  });
+
+  useSocket<IPlayerHandData>(SOCKET_IO.ON_UPDATE_PLAYER_HAND, (data) => {
+    dispatch(updatePlayerHand(data));
   });
 
   return <>{children}</>;

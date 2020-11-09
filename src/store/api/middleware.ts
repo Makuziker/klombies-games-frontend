@@ -27,6 +27,18 @@ export const SocketMiddleware: Middleware<{}, IApplicationState> = store => next
     case ACTION.READY_TO_START:
       Api.readyToStart();
       break;
+    case ACTION.DRAW_FROM_DECK:
+      Api.drawFromDeck();
+      break;
+    case ACTION.DRAW_FROM_DISCARD:
+      Api.drawFromDiscard();
+      break;
+    case ACTION.DISCARD_FROM_HAND:
+      Api.discardFromHand(action.payload);
+      break;
+    case ACTION.GO_OUT:
+      Api.goOut(action.payload);
+      break;
     default:
       return next(action);
   }
