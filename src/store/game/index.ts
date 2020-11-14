@@ -1,4 +1,4 @@
-import { createSelector, createAction, createSlice, createReducer, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useMemo } from 'react';
 
 import { STATE_KEY_GAME } from '../constants';
@@ -14,7 +14,9 @@ const initialState: IGameState = {
   turnIdx: 1,
   topCardInDiscard: { id: 'placeholder', value: 'JOKER', suit: '' },
   playerList: [],
-  players: {}
+  players: {},
+  playerIdWhoWentOut: null,
+  winnerId: null
 };
 
 // selectors
@@ -28,6 +30,11 @@ export const selectDealerIdx = () => createSelector(sliceSelector, ({ dealerIdx 
 export const selectTurnIdx = () => createSelector(sliceSelector, ({ turnIdx }) => turnIdx);
 export const selectTopCardInDiscard = () => createSelector(sliceSelector, ({ topCardInDiscard }) => topCardInDiscard);
 export const selectPlayerList = () => createSelector(sliceSelector, ({ playerList }) => playerList);
+export const selectPlayerIdWhoWentOut = () => createSelector(sliceSelector, ({ playerIdWhoWentOut }) => playerIdWhoWentOut);
+export const selectWinnerId = () => createSelector(sliceSelector, ({ winnerId }) => winnerId);
+export const selectPlayers = () => createSelector(sliceSelector, ({ players }) => players);
+
+
 
 export const useGameSelectors = () => ({
   selectGameState: useMemo(selectGameState, []),
@@ -37,7 +44,10 @@ export const useGameSelectors = () => ({
   selectDealerIdx: useMemo(selectDealerIdx, []),
   selectTurnIdx: useMemo(selectTurnIdx, []),
   selectTopCardInDiscard: useMemo(selectTopCardInDiscard, []),
-  selectPlayerList: useMemo(selectPlayerList, [])
+  selectPlayerList: useMemo(selectPlayerList, []),
+  selectPlayerIdWhoWentOut: useMemo(selectPlayerIdWhoWentOut, []),
+  selectWinnerId: useMemo(selectWinnerId, []),
+  selectPlayers: useMemo(selectPlayers, [])
 });
 
 // actions
@@ -58,7 +68,9 @@ export const gameSlice = createSlice({
         turnIdx,
         topCardInDiscard,
         playerList,
-        players
+        players,
+        playerIdWhoWentOut,
+        winnerId
       }
     }: PayloadAction<IGameState>) {
       return {
@@ -69,10 +81,13 @@ export const gameSlice = createSlice({
         turnIdx,
         topCardInDiscard,
         playerList,
-        players
+        players,
+        playerIdWhoWentOut,
+        winnerId
       }
     },
     setPlayerHand(state, { payload: { hand }}: PayloadAction<IPlayerHandData>) {
+      // TODO, useReducer from redux/toolkit
       return {
         ...state
       }

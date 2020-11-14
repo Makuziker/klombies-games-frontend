@@ -39,6 +39,9 @@ export const SocketMiddleware: Middleware<{}, IApplicationState> = store => next
     case ACTION.GO_OUT:
       Api.goOut(action.payload);
       break;
+    case ACTION.LAY_DOWN_CARDS:
+      Api.layDownCards(action.payload);
+      break;
     default:
       return next(action);
   }

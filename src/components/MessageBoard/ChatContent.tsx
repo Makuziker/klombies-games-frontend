@@ -26,18 +26,26 @@ const useStyles = makeStyles(() => ({
 export function ChatContent() {
   const classes = useStyles();
 
-  const { selectDisplayName, selectUsersInRoom, selectMessages } = useAppSelectors();
+  const {
+    selectDisplayName,
+    selectUsersInRoom,
+    selectMessages,
+    selectIsGameInSession,
+    selectPlayers
+  } = useAppSelectors();
 
-  const { displayName } = useSelector((state: IApplicationState) => ({
-    displayName: selectDisplayName(state)
-  }));
-
-  const { usersInRoom } = useSelector((state: IApplicationState) => ({
-    usersInRoom: selectUsersInRoom(state)
-  }));
-
-  const { messages } = useSelector((state: IApplicationState) => ({
-    messages: selectMessages(state)
+  const {
+    displayName,
+    usersInRoom,
+    messages,
+    players,
+    isGameInSession
+  } = useSelector((state: IApplicationState) => ({
+    displayName: selectDisplayName(state),
+    usersInRoom: selectUsersInRoom(state),
+    messages: selectMessages(state),
+    players: selectPlayers(state),
+    isGameInSession: selectIsGameInSession(state)
   }));
 
   const dispatch = useDispatch();
@@ -51,7 +59,10 @@ export function ChatContent() {
 
   return (
     <Box className={classes.container}>
-      <MessageBoardUsers users={usersInRoom} />
+      <MessageBoardUsers
+        users={usersInRoom}
+        players={players}
+        isGameInSession={isGameInSession} />
       <Divider />
       <ScrollToBottom className={classes.messages}>
         {messages?.map(message => (

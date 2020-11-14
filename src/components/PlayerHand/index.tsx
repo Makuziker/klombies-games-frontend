@@ -11,6 +11,7 @@ export interface IPlayerHandProps {
   anotherPlayerGoneOut: boolean;
   onDiscard: (card: ICard) => void;
   onGoOut: (groups: ICard[][], discard: ICard) => void;
+  onLayDownCards: (groups: ICard[][], discard: ICard) => void;
 }
 
 export function PlayerHand({
@@ -20,15 +21,18 @@ export function PlayerHand({
   isCurrentPlayersTurn,
   anotherPlayerGoneOut,
   onDiscard,
-  onGoOut
+  onGoOut,
+  onLayDownCards
 }: IPlayerHandProps) {
   const [isGoingOut, setIsGoingOut] = useState(false);
   const [selectedCards, setSelectedCards] = useState<ICard[]>([]);
   const [cardGroups, setCardGroups] = useState<ICard[][]>([]);
 
   const toggleGoingOut = useCallback(() => {
+    setCardGroups([]);
+    setSelectedCards([]);
     setIsGoingOut(val => !val);
-  }, []);
+  }, [setCardGroups, setSelectedCards, setIsGoingOut]);
 
   const isCardGrouped = useCallback((card: ICard) => {
     if (!cardGroups.length) return false;
@@ -57,9 +61,22 @@ export function PlayerHand({
   useEffect(() => {
     const lastUngroupedCard = getLastUngroupedCard();
     if (lastUngroupedCard) {
-      onGoOut(cardGroups, lastUngroupedCard);
+      if (anotherPlayerGoneOut) {
+        onLayDownCards(cardGroups, lastUngroupedCard);
+        setCardGroups([]);
+        setSelectedCards([]);
+      } else {
+        onGoOut(cardGroups, lastUngroupedCard);
+        setCardGroups([]);
+        setSelectedCards([]);
+        setIsGoingOut(false);
+      }
     }
-  }, [cardGroups, getLastUngroupedCard, onGoOut]);
+  }, [cardGroups, anotherPlayerGoneOut, getLastUngroupedCard, onGoOut, onLayDownCards]);
+
+  const isCardSelected = useCallback((card: ICard) => {
+    return !!selectedCards.find(c => c.id === card.id);
+  }, [selectedCards]);
 
   const toggleCardSelect = (card: ICard) => {
     const idx = selectedCards.findIndex(c => c.id === card.id);
@@ -70,20 +87,20 @@ export function PlayerHand({
     }
   }
 
-  const onCardClick = (card: ICard) => {
+  const onCardSelect = (card: ICard) => {
     if (isGoingOut || anotherPlayerGoneOut) {
       toggleCardSelect(card);
     } else {
-      onDiscard(card);
+      setSelectedCards([card]);
     }
   }
 
   const renderTutorialMessage = useCallback(() => {
     if (!isCurrentPlayersTurn) return 'Await your next turn...';
-    if (anotherPlayerGoneOut) return 'Another player has gone out. Select the cards you can group and click \'Group\'. Leftover cards will be added to your score.';
-    if (isGoingOut) return 'Select the cards you want to group and click \'Group\'. Finish going out by grouping all but but one card in your hand. The last remaining card will automatically discard.';
+    if (anotherPlayerGoneOut) return 'Another player has gone out. Select the cards you can group and click \'Group\'. If you cannot groups every card in your hand (besides your one discard), select one card to discard; leftover cards in your hand will be added to your score.';
+    if (isGoingOut) return 'Select the cards you want to group and click \'Group\'. Finish going out by grouping every card in your hand (besides your discard). The last remaining card will automatically discard.';
     if (playerMayDraw) return 'Draw a card from the deck or from the discard pile.';
-    if (playerMayDiscard) return 'Select a card in your hand to discard and end your turn. Or click \'Start Going Out\' if you can group your cards.';
+    if (playerMayDiscard) return 'Select a card in your hand, then click \'Discard Selected Card\' to end your turn. Or click \'Start Going Out\' if you can group all your cards.';
     return 'Edge case in the tutorial';
   }, [isCurrentPlayersTurn, anotherPlayerGoneOut, isGoingOut, playerMayDraw, playerMayDiscard]);
 
@@ -93,8 +110,25 @@ export function PlayerHand({
   );
 
   const renderCardFace = (card: ICard) => {
-    return card.value === 'JOKER' ? card.value : `${card.value} of ${card.suit}`;
+    const valueAndSuit = card.value === 'JOKER' ? card.value : `${card.value} of ${card.suit}`;
+    const selectedStr = isCardSelected(card) ? ' - SELECTED' : '';
+    return `${valueAndSuit}${selectedStr}`;
   }
+
+  const handleDiscard = useCallback(
+    () => {
+      if (anotherPlayerGoneOut) {
+        onLayDownCards(cardGroups, selectedCards[0]);
+        setSelectedCards([]);
+        setCardGroups([]);
+      } else {
+        onDiscard(selectedCards[0]);
+        setSelectedCards([]);
+        setCardGroups([]);
+      }
+    },
+    [anotherPlayerGoneOut, cardGroups, selectedCards, onLayDownCards, onDiscard, setSelectedCards, setCardGroups]
+  );
 
   // todo remove
   useEffect(() => {
@@ -131,12 +165,19 @@ export function PlayerHand({
           <ListItem key={card.id}>
             <Button
               disabled={!playerMayDiscard || isCardGrouped(card)}
-              onClick={() => onCardClick(card)}>
+              onClick={() => onCardSelect(card)}>
               {renderCardFace(card)}
             </Button>
           </ListItem>
         ))}
       </List>
+      <Button
+        disabled={!isCurrentPlayersTurn || !playerMayDiscard || isGoingOut || selectedCards.length !== 1}
+        onClick={() => handleDiscard()}
+        variant="contained"
+        color="secondary">
+        Discard Selected Card
+      </Button>
     </>
   );
 }

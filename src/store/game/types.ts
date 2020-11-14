@@ -6,6 +6,8 @@ export interface IGameState {
   topCardInDiscard?: ICard;
   playerList: string[];
   players: IPlayers;
+  playerIdWhoWentOut: string | null;
+  winnerId: IWinner;
 }
 
 export interface IPlayerHandData {
@@ -30,3 +32,5 @@ export interface IPlayers {
 }
 
 export type IRound = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+
+export type IWinner = null | string | string[];

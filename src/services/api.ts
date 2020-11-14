@@ -29,6 +29,11 @@ export interface IGoOutProps {
   discard: ICard;
 }
 
+export interface ILayDownCardsProps {
+  groups: ICard[][];
+  discard: ICard;
+}
+
 const callback: ICallback = ({ error, request }) => {
   if (error) {
     console.error(error, request);
@@ -90,6 +95,13 @@ export function discardFromHand({ card }: IDiscardFromHandProps) {
 
 export function goOut({ groups, discard }: IGoOutProps) {
   socket.emit(ACTION.GO_OUT, { groups, discard }, callback);
+  return () => {
+    socket.emit('disconnect');
+  }
+}
+
+export function layDownCards({groups, discard}: ILayDownCardsProps) {
+  socket.emit(ACTION.LAY_DOWN_CARDS, { groups, discard }, callback);
   return () => {
     socket.emit('disconnect');
   }

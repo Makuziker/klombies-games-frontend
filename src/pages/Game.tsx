@@ -2,7 +2,7 @@ import React, { useMemo, useCallback } from 'react';
 import { Typography } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ICard, useAppSelectors, apiDrawFromDeck, apiDrawFromDiscard, apiDiscardFromHand, apiGoOut } from '../store';
+import { ICard, useAppSelectors, apiDrawFromDeck, apiDrawFromDiscard, apiDiscardFromHand, apiGoOut, apiLayDownCards } from '../store';
 import { PlayerQueue, CardDeck, PlayerHand } from '../components';
 import { IApplicationState } from '../store/types';
 import { socket } from '../constants';
@@ -15,7 +15,10 @@ export function GamePage() {
     selectTurnIdx,
     selectTopCardInDiscard,
     selectUsersInRoom,
-    selectPlayerList
+    selectPlayerList,
+    selectPlayerIdWhoWentOut,
+    selectWinnerId,
+    selectIsGameInSession
   } = useAppSelectors();
 
   const dispatch = useDispatch();
@@ -27,7 +30,10 @@ export function GamePage() {
     turnIdx,
     topCardInDiscard,
     usersInRoom,
-    playerList
+    playerList,
+    playerIdWhoWentOut,
+    winnerId,
+    isGameInSession
   } = useSelector((state: IApplicationState) => ({
     hand: selectHand(state),
     currentRound: selectCurrentRound(state),
@@ -35,7 +41,10 @@ export function GamePage() {
     turnIdx: selectTurnIdx(state),
     topCardInDiscard: selectTopCardInDiscard(state),
     usersInRoom: selectUsersInRoom(state),
-    playerList: selectPlayerList(state)
+    playerList: selectPlayerList(state),
+    playerIdWhoWentOut: selectPlayerIdWhoWentOut(state),
+    winnerId: selectWinnerId(state),
+    isGameInSession: selectIsGameInSession(state)
   }));
 
   const orderedPlayerData = useMemo(
@@ -62,6 +71,33 @@ export function GamePage() {
     [isCurrentPlayersTurn, hand, currentRound]
   );
 
+  const anotherPlayerGoneOut = useMemo(
+    () => playerIdWhoWentOut !== null,
+    [playerIdWhoWentOut]
+  );
+
+  const winnerPlayer = useMemo(
+    () => {
+      if (!winnerId) return null;
+      if (Array.isArray(winnerId)) {
+        return winnerId.map(winner => orderedPlayerData.find(p => p.id === winner));
+      }
+      return orderedPlayerData.find(player => player.id === winnerId);
+    },
+    [orderedPlayerData, winnerId]
+  );
+
+  const winnerMessage = useMemo(
+    () => {
+      if (!winnerPlayer) return null;
+      if (Array.isArray(winnerPlayer)) {
+        return `Game Over. The tied winners are ${winnerPlayer.map(w => `${w?.name} `)}`;
+      }
+      return `Game Over. The winner is ${winnerPlayer.name}!`;
+    },
+    [winnerPlayer]
+  );
+
   const onDrawFromDeck = useCallback(() => {
     dispatch(apiDrawFromDeck());
   }, [dispatch]);
@@ -79,7 +115,13 @@ export function GamePage() {
     dispatch(apiGoOut({ groups, discard }));
   }, [dispatch]);
 
-  return (
+  const onLayDownCards = useCallback((groups: ICard[][], discard: ICard) => {
+    dispatch(apiLayDownCards({ groups, discard }));
+  }, [dispatch]);
+
+  return winnerPlayer && !isGameInSession ? (
+  <Typography variant="h3" component="h3">{winnerMessage}</Typography>
+  ) : (
     <>
       <PlayerQueue
         players={orderedPlayerData}
@@ -98,10 +140,11 @@ export function GamePage() {
         hand={hand}
         onDiscard={onDiscardFromHand}
         onGoOut={onGoOut}
+        onLayDownCards={onLayDownCards}
         playerMayDraw={playerMayDraw}
         playerMayDiscard={playerMayDiscard}
         isCurrentPlayersTurn={isCurrentPlayersTurn}
-        anotherPlayerGoneOut={false} // todo
+        anotherPlayerGoneOut={anotherPlayerGoneOut}
       />
     </>
   );
