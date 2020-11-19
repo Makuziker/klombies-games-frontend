@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
+import { Grid, makeStyles, Typography } from '@material-ui/core';
 import { ICard } from '../../store';
+import { PlayingCard } from '../PlayingCard';
 
 export interface ICardDeckProps {
   topCardInDiscard?: ICard;
@@ -9,22 +10,39 @@ export interface ICardDeckProps {
   playerMayDraw: boolean;
 }
 
+const useStyles = makeStyles(({ spacing }) => ({
+  card: {
+    padding: spacing(1)
+  }
+}));
+
 export function CardDeck({
   topCardInDiscard,
   onDrawFromDeck,
   onDrawFromDiscard,
   playerMayDraw
 }: ICardDeckProps) {
+  const classes = useStyles();
   return (
-    <>
-      <Button disabled={!playerMayDraw || !topCardInDiscard} onClick={onDrawFromDiscard}>
-        {topCardInDiscard
-          ? `${topCardInDiscard.value} of ${topCardInDiscard.suit}`
-          : 'Discard Pile Empty'}
-      </Button>
-      <Button disabled={!playerMayDraw} onClick={onDrawFromDeck}>
-        Deck
-      </Button>
-    </>
+    <Grid container direction="row" justify="center" alignItems="center">
+      <Grid item className={classes.card}>
+        <Typography variant="subtitle2" align="center">Discard</Typography>
+        <PlayingCard
+          card={topCardInDiscard}
+          isDisabled={!playerMayDraw || !topCardInDiscard}
+          isSelected={false}
+          isEmpty={!topCardInDiscard}
+          onCardSelect={onDrawFromDiscard}
+        />
+      </Grid>
+      <Grid item className={classes.card}>
+        <Typography variant="subtitle2" align="center">Deck</Typography>
+        <PlayingCard
+          isDisabled={!playerMayDraw}
+          isSelected={false}
+          onCardSelect={onDrawFromDeck}
+        />
+      </Grid>
+    </Grid>
   );
 }

@@ -31,7 +31,8 @@ export function ChatContent() {
     selectUsersInRoom,
     selectMessages,
     selectIsGameInSession,
-    selectPlayers
+    selectPlayers,
+    selectShowGameOverPage
   } = useAppSelectors();
 
   const {
@@ -39,13 +40,15 @@ export function ChatContent() {
     usersInRoom,
     messages,
     players,
-    isGameInSession
+    isGameInSession,
+    showGameOverPage
   } = useSelector((state: IApplicationState) => ({
     displayName: selectDisplayName(state),
     usersInRoom: selectUsersInRoom(state),
     messages: selectMessages(state),
     players: selectPlayers(state),
-    isGameInSession: selectIsGameInSession(state)
+    isGameInSession: selectIsGameInSession(state),
+    showGameOverPage: selectShowGameOverPage(state)
   }));
 
   const dispatch = useDispatch();
@@ -62,7 +65,8 @@ export function ChatContent() {
       <MessageBoardUsers
         users={usersInRoom}
         players={players}
-        isGameInSession={isGameInSession} />
+        isGameInSession={isGameInSession}
+        showGameOverPage={showGameOverPage} />
       <Divider />
       <ScrollToBottom className={classes.messages}>
         {messages?.map(message => (

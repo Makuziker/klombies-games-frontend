@@ -1,10 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { List, ListItem, Button, Typography } from '@material-ui/core';
+import { Button, Typography, Grid, makeStyles } from '@material-ui/core';
 
 import { ICard } from '../../store';
+import { CardGroups } from './CardGroups';
+import { PlayingCard } from '../PlayingCard';
 
-export interface IPlayerHandProps {
+export interface IPlayerControlsProps {
   hand: ICard[];
+  validGroups: ICard[][];
   playerMayDiscard: boolean;
   playerMayDraw: boolean;
   isCurrentPlayersTurn: boolean;
@@ -14,8 +17,20 @@ export interface IPlayerHandProps {
   onLayDownCards: (groups: ICard[][], discard: ICard) => void;
 }
 
-export function PlayerHand({
+const useStyles = makeStyles(({ spacing }) => ({
+  button: {
+    padding: spacing(1)
+  },
+  handContainer: {
+    boxShadow: '4px 4px 8px #ddd',
+    border: '1px solid #ccc',
+    minHeight: spacing(8)
+  }
+}));
+
+export function PlayerControls({
   hand,
+  validGroups,
   playerMayDraw,
   playerMayDiscard,
   isCurrentPlayersTurn,
@@ -23,10 +38,12 @@ export function PlayerHand({
   onDiscard,
   onGoOut,
   onLayDownCards
-}: IPlayerHandProps) {
+}: IPlayerControlsProps) {
   const [isGoingOut, setIsGoingOut] = useState(false);
   const [selectedCards, setSelectedCards] = useState<ICard[]>([]);
   const [cardGroups, setCardGroups] = useState<ICard[][]>([]);
+
+  const classes = useStyles();
 
   const toggleGoingOut = useCallback(() => {
     setCardGroups([]);
@@ -105,15 +122,9 @@ export function PlayerHand({
   }, [isCurrentPlayersTurn, anotherPlayerGoneOut, isGoingOut, playerMayDraw, playerMayDiscard]);
 
   const renderGoOutButtonLabel = useCallback(
-    () => isGoingOut ? 'Cancel Going Out' : 'Start Going Out',
+    () => isGoingOut ? 'Cancel Go Out' : 'Go Out',
     [isGoingOut]
   );
-
-  const renderCardFace = (card: ICard) => {
-    const valueAndSuit = card.value === 'JOKER' ? card.value : `${card.value} of ${card.suit}`;
-    const selectedStr = isCardSelected(card) ? ' - SELECTED' : '';
-    return `${valueAndSuit}${selectedStr}`;
-  }
 
   const handleDiscard = useCallback(
     () => {
@@ -130,54 +141,72 @@ export function PlayerHand({
     [anotherPlayerGoneOut, cardGroups, selectedCards, onLayDownCards, onDiscard, setSelectedCards, setCardGroups]
   );
 
-  // todo remove
-  useEffect(() => {
-    console.log('selected cards', selectedCards);
-    console.log('card groups', cardGroups);
-  }, [selectedCards, cardGroups]);
-
   return (
     <>
-      <Typography>{renderTutorialMessage()}</Typography>
-      <Button
-        disabled={!isCurrentPlayersTurn || anotherPlayerGoneOut || !playerMayDiscard}
-        onClick={toggleGoingOut}
-        variant="contained"
-        color="primary">
-        {renderGoOutButtonLabel()}
-      </Button>
-      <Button
-        disabled={selectedCards.length < 3}
-        onClick={() => addGroup()}
-        variant="contained"
-        color="primary">
-        Group Selected Cards
-      </Button>
-      <Button
-        disabled={cardGroups.length < 1}
-        onClick={() => setCardGroups([])}
-        variant="contained"
-        color="secondary">
-        Ungroup all Cards
-      </Button>
-      <List>
-        {hand.map((card) => (
-          <ListItem key={card.id}>
-            <Button
-              disabled={!playerMayDiscard || isCardGrouped(card)}
-              onClick={() => onCardSelect(card)}>
-              {renderCardFace(card)}
-            </Button>
-          </ListItem>
-        ))}
-      </List>
-      <Button
-        disabled={!isCurrentPlayersTurn || !playerMayDiscard || isGoingOut || selectedCards.length !== 1}
-        onClick={() => handleDiscard()}
-        variant="contained"
-        color="secondary">
-        Discard Selected Card
-      </Button>
+      <Typography variant="subtitle2" align="center">{renderTutorialMessage()}</Typography>
+      <CardGroups stagedGroups={cardGroups} validGroups={validGroups} />
+      <Grid container direction="row" justify="center" alignItems="center">
+        <Grid item className={classes.button}>
+          <Button
+            disabled={!isCurrentPlayersTurn || anotherPlayerGoneOut || !playerMayDiscard}
+            onClick={toggleGoingOut}
+            variant="contained"
+            color={isGoingOut ? "secondary" : "primary"}
+          >
+            {renderGoOutButtonLabel()}
+          </Button>
+        </Grid>
+        <Grid item className={classes.button}>
+          <Button
+            disabled={selectedCards.length < 3}
+            onClick={() => addGroup()}
+            variant="contained"
+            color="primary"
+          >
+            Group
+          </Button>
+        </Grid>
+        <Grid item className={classes.button}>
+          <Button
+            disabled={cardGroups.length < 1}
+            onClick={() => setCardGroups([])}
+            variant="contained"
+            color="secondary"
+          >
+            Ungroup
+          </Button>
+        </Grid>
+      </Grid>
+      <Grid container justify="center" className={classes.handContainer}>
+        <Typography align="center" variant="subtitle1">Your Hand</Typography>
+        <Grid
+          item
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+        >
+          {hand.map((card) => (
+            <PlayingCard
+              key={card.id}
+              card={card}
+              isDisabled={!playerMayDiscard || isCardGrouped(card)}
+              isSelected={isCardSelected(card)}
+              onCardSelect={onCardSelect}
+            />
+          ))}
+        </Grid>
+      </Grid>
+      <Grid container justify="center" alignItems="center" className={classes.button}>
+        <Button
+          disabled={!isCurrentPlayersTurn || !playerMayDiscard || isGoingOut || selectedCards.length !== 1}
+          onClick={() => handleDiscard()}
+          variant="contained"
+          color="secondary"
+        >
+          Discard
+        </Button>
+      </Grid>
     </>
   );
 }

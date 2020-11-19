@@ -5,11 +5,13 @@ import { watchUsersInRoom } from './usersInRoom';
 import { watchAddMessage } from './addMessage';
 import { watchStartGame } from './startGame';
 import { watchUpdateGameState } from './updateGameState';
+import { watchUpdateShowGameOverPage } from './updateShowGameOverPage';
 
 export const sagas = [
   fork(watchCurrentUserJoinRoom),
   fork(watchUsersInRoom),
   fork(watchAddMessage),
   fork(watchStartGame),
-  fork(watchUpdateGameState)
+  fork(watchUpdateGameState),
+  fork(watchUpdateShowGameOverPage)
 ];

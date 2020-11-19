@@ -38,7 +38,7 @@ export function RoomPage() {
     [displayName, roomCode]
   );
 
-  const onClick = useCallback(() => {
+  const onReadyToStart = useCallback(() => {
     dispatch(apiReadyToStart());
   }, [dispatch]);
 
@@ -47,14 +47,14 @@ export function RoomPage() {
   ) : (
       <Container>
         <Grid container alignItems="center" direction="column">
-          <Typography variant="h3" component="h3">{title}</Typography>
-          <Typography paragraph>Click the button when you are ready to start (minimum two players required). The game will start when all players are ready.</Typography>
+          <Typography variant="h4" component="h4">{title}</Typography>
+          <Typography paragraph align="center">Click the button when you are ready to start (minimum two players required). The game will start when all players are ready.</Typography>
           <Button
             variant="contained"
             color="primary"
             disabled={user?.readyToStart || numUsersInRoom < 2}
             size="large"
-            onClick={onClick}>
+            onClick={onReadyToStart}>
             Ready
           </Button>
         </Grid>

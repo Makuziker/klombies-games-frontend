@@ -8,10 +8,15 @@ export interface IGameState {
   players: IPlayers;
   playerIdWhoWentOut: string | null;
   winnerId: IWinner;
+  showGameOverPage: boolean;
 }
 
 export interface IPlayerHandData {
   hand: ICard[];
+}
+
+export interface IShowGameOverPageData {
+  showGameOverPage: boolean;
 }
 
 export interface ICard {
@@ -24,7 +29,7 @@ export interface IPlayer {
   score: number;
   numGoneOut: number;
   hand: ICard[];
-  groups: ICard[];
+  groups: ICard[][];
 }
 
 export interface IPlayers {

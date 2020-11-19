@@ -17,7 +17,7 @@ const useStyles = makeStyles(({ zIndex }) => ({
 }));
 
 export default function NavBar() {
-  const [showChat, setShowChat] = useState(true);
+  const [showChat, setShowChat] = useState(false);
   const isHomePage = useRouteMatch({
     exact: true,
     path: ROUTES.home

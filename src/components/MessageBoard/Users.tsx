@@ -9,21 +9,26 @@ export interface IMessageBoardUsersProps {
   users: IUser[];
   players: IPlayers;
   isGameInSession: boolean;
+  showGameOverPage: boolean;
 }
 
-export function MessageBoardUsers({ users, players, isGameInSession }: IMessageBoardUsersProps) {
+export function MessageBoardUsers({
+  users,
+  players,
+  isGameInSession,
+  showGameOverPage
+}: IMessageBoardUsersProps) {
   const renderReadyToStart = (user: IUser) => user.readyToStart ? 'Ready!' : 'Not Ready';
-  const renderPlayerScore = (player: IPlayer) => `Score: ${player?.score}`;
-
+  const renderPlayerScore = (player: IPlayer) => `Score: ${player.score}`;
   const renderUserDetails = (user: IUser) => {
-    if (isGameInSession) return renderPlayerScore(players[user.id]);
+    if (isGameInSession || showGameOverPage) return renderPlayerScore(players[user.id]);
     return renderReadyToStart(user);
   }
 
   return (
     <Accordion defaultExpanded={true}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography>Users in the Room:</Typography>
+        <Typography>Players in the Room:</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <List>

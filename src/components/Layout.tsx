@@ -9,10 +9,12 @@ export interface ILayoutProps {
 const useStyles = makeStyles(({ spacing }) => ({
   root: {
     display: 'flex',
-    width: '100%'
+    width: '100%',
+    justifyContent: 'center'
   },
   content: {
-    padding: spacing(2)
+    padding: spacing(2),
+    width: '100%'
   }
 }));
 
