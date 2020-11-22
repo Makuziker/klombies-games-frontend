@@ -142,7 +142,6 @@ export function GamePage() {
   }, [dispatch]);
 
   const onDiscardFromHand = useCallback((card: ICard) => {
-    console.log('discard from hand');
     dispatch(apiDiscardFromHand({ card }));
   }, [dispatch]);
 

@@ -116,8 +116,8 @@ export function PlayerControls({
     if (!isCurrentPlayersTurn) return 'Await your next turn...';
     if (anotherPlayerGoneOut) return 'Another player has gone out. Select the cards you can group and click \'Group\'. If you cannot groups every card in your hand (besides your one discard), select one card to discard; leftover cards in your hand will be added to your score.';
     if (isGoingOut) return 'Select the cards you want to group and click \'Group\'. Finish going out by grouping every card in your hand (besides your discard). The last remaining card will automatically discard.';
-    if (playerMayDraw) return 'Draw a card from the deck or from the discard pile.';
-    if (playerMayDiscard) return 'Select a card in your hand, then click \'Discard Selected Card\' to end your turn. Or click \'Start Going Out\' if you can group all your cards.';
+    if (playerMayDraw) return 'Draw a card from the Deck or from the Discard Pile.';
+    if (playerMayDiscard) return 'Select a card in your hand, then click \'Discard\' to end your turn. Or click \'Go Out\' if you can group all your cards.';
     return 'Edge case in the tutorial';
   }, [isCurrentPlayersTurn, anotherPlayerGoneOut, isGoingOut, playerMayDraw, playerMayDiscard]);
 

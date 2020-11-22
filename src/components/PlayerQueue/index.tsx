@@ -12,15 +12,12 @@ export interface IPlayerQueueProps {
   playerIdWhoWentOut: string | null;
 }
 
-const useStyles = makeStyles(({ breakpoints }) => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     flexGrow: 1,
     boxShadow: '4px 4px 8px #ccc',
-    padding: 0,
-    [breakpoints.down('md')]: {
-      flexDirection: 'column'
-    }
+    padding: 0
   },
   item: {
     justifyContent: 'center',
@@ -71,7 +68,7 @@ export function PlayerQueue({
         {players.map((player, idx) => {
           return (
             <ListItem key={player.id} className={renderItemClasses(player, idx)}>
-              <Typography align='center' component='h6' variant='h6'>
+              <Typography align='center' component='p'>
                 {renderQueueItemText(player, idx)}
               </Typography>
             </ListItem>

@@ -75,14 +75,12 @@ export function HomePage() {
             <TextField
               fullWidth
               label="Name"
-              required
               inputProps={{ maxLength: 14}}
               onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, 'name')}
             />
             <TextField
               fullWidth
               label="Room Code"
-              required
               inputProps={{ maxLength: 20}}
               onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange(e, 'room')}
             />
