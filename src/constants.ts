@@ -8,6 +8,6 @@ export const ROUTES: Record<IRouteKey, string> = {
   game: '/game/:id',
 };
 
-export const API_ENDPOINT = 'http://localhost:4000';
+export const API_ENDPOINT = 'https://klombies-games-api.herokuapp.com/';
 
 export const socket = io(API_ENDPOINT);
