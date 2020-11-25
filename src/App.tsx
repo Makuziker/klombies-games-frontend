@@ -1,5 +1,5 @@
-import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 
 import { ROUTES } from './constants';
@@ -19,5 +19,5 @@ export default function App() {
         </Switch>
       </Layout>
     </Providers>
-  )
+  );
 }
