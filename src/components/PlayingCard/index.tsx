@@ -25,7 +25,7 @@ const useStyles = makeStyles(({ spacing }) => ({
     background: '#edeeed'
   },
   cardEmpty: {
-
+    display: 'none'
   },
   cardFaceDown: {
 

@@ -9,7 +9,7 @@ export const ROUTES: Record<IRouteKey, string> = {
 };
 
 export const API_ENDPOINT = process.env.NODE_ENV === 'development'
-  ? 'http://localhost:5000'
+  ? 'http://localhost:4000'
   : 'https://klombies-games-api.herokuapp.com/';
 
 export const socket = io(API_ENDPOINT);

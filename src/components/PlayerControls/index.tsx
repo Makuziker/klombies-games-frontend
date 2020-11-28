@@ -3,7 +3,7 @@ import { Button, Typography, Grid, makeStyles } from '@material-ui/core';
 
 import { ICard } from '../../store';
 import { CardGroups } from './CardGroups';
-import { PlayingCard } from '../PlayingCard';
+import { CardHand } from './CardHand';
 
 export interface IPlayerControlsProps {
   hand: ICard[];
@@ -52,11 +52,7 @@ export function PlayerControls({
   }, [setCardGroups, setSelectedCards, setIsGoingOut]);
 
   const isCardGrouped = useCallback((card: ICard) => {
-    if (!cardGroups.length) return false;
-    for (let group of cardGroups) {
-      if (group.find(c => c.id === card.id)) return true;
-    }
-    return false;
+    return !!cardGroups.length && cardGroups.some(group => group.some(c => c.id === card.id));
   }, [cardGroups]);
 
   const getLastUngroupedCard = useCallback(() => {
@@ -177,26 +173,13 @@ export function PlayerControls({
           </Button>
         </Grid>
       </Grid>
-      <Grid container justify="center" className={classes.handContainer}>
-        <Typography align="center" variant="subtitle1">Your Hand</Typography>
-        <Grid
-          item
-          container
-          direction="row"
-          justify="center"
-          alignItems="center"
-        >
-          {hand.map((card) => (
-            <PlayingCard
-              key={card.id}
-              card={card}
-              isDisabled={!playerMayDiscard || isCardGrouped(card)}
-              isSelected={isCardSelected(card)}
-              onCardSelect={onCardSelect}
-            />
-          ))}
-        </Grid>
-      </Grid>
+      <CardHand
+        hand={hand}
+        playerMayDiscard={playerMayDiscard}
+        onCardSelect={onCardSelect}
+        isCardGrouped={isCardGrouped}
+        isCardSelected={isCardSelected}
+      />
       <Grid container justify="center" alignItems="center" className={classes.button}>
         <Button
           disabled={!isCurrentPlayersTurn || !playerMayDiscard || isGoingOut || selectedCards.length !== 1}

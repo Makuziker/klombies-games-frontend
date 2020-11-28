@@ -21,7 +21,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   }
 }));
 
-export const CardGroups = ({ stagedGroups, validGroups }: ICardGroupProps) => {
+export function CardGroups({ stagedGroups, validGroups }: ICardGroupProps) {
   const classes = useStyles();
 
   const selectGroups = useCallback(
