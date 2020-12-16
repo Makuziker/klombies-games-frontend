@@ -23,6 +23,11 @@ export default function NavBar() {
     path: ROUTES.home
   });
 
+  const isAuthPage = useRouteMatch({
+    exact: true,
+    path: ROUTES.auth
+  });
+
   const classes = useStyles();
 
   const toggleChat = useCallback(() => {
@@ -36,7 +41,7 @@ export default function NavBar() {
           <Typography color="inherit" className={classes.brand}>
             Klombies Games
           </Typography>
-          {!isHomePage && (
+          {!isHomePage && !isAuthPage && (
             <Button onClick={toggleChat} color="inherit">
               <Badge color="secondary" variant="dot">
                 <ForumIcon />

@@ -8,6 +8,7 @@ export * from './main';
 export * from './game';
 export * from './api';
 export * from './utils/networkResource';
+export * from './types'
 
 export const reducers = {
   [STATE_KEY_PROCESSING]: processingReducer,

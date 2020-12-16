@@ -6,6 +6,8 @@ import { watchAddMessage } from './addMessage';
 import { watchStartGame } from './startGame';
 import { watchUpdateGameState } from './updateGameState';
 import { watchUpdateShowGameOverPage } from './updateShowGameOverPage';
+import { watchUserLoggedIn } from './userLoggedIn';
+import { watchUserSignedUp } from './userSignedUp';
 
 export const sagas = [
   fork(watchCurrentUserJoinRoom),
@@ -13,5 +15,7 @@ export const sagas = [
   fork(watchAddMessage),
   fork(watchStartGame),
   fork(watchUpdateGameState),
-  fork(watchUpdateShowGameOverPage)
+  fork(watchUpdateShowGameOverPage),
+  fork(watchUserLoggedIn),
+  fork(watchUserSignedUp)
 ];

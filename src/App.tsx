@@ -1,22 +1,38 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { CssBaseline } from '@material-ui/core';
+import { createMuiTheme, CssBaseline } from '@material-ui/core';
 
 import { ROUTES } from './constants';
 import { Layout } from './components';
-import { HomePage, RoomPage, GamePage } from './pages';
+import { HomePage, RoomPage, GamePage, AuthPage } from './pages';
 import { Providers } from './providers';
+import { AuthGuard } from './components';
 
 export default function App() {
+  const theme = createMuiTheme({
+    palette: {
+      type: 'dark',
+      primary: {
+        main: '#5332a2d4'
+      },
+      secondary: {
+        main: '#943e6ec7'
+      }
+    }
+  });
+
   return (
-    <Providers>
+    <Providers theme={theme}>
       <CssBaseline />
       <Layout>
-        <Switch>
-          <Route path={ROUTES.home} exact component={HomePage} />
-          <Route path={ROUTES.room} exact component={RoomPage} />
-          <Route path={ROUTES.game} exact component={GamePage} />
-        </Switch>
+        <AuthGuard>
+          <Switch>
+            <Route path={ROUTES.home} exact component={HomePage} />
+            <Route path={ROUTES.auth} exact component={AuthPage} />
+            <Route path={ROUTES.room} exact component={RoomPage} />
+            <Route path={ROUTES.game} exact component={GamePage} />
+          </Switch>
+        </AuthGuard>
       </Layout>
     </Providers>
   );

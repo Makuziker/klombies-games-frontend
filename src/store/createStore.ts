@@ -5,7 +5,7 @@ import createSagaMiddleware from 'redux-saga';
 
 import { reducers } from '.';
 import { sagas } from './sagas';
-import { SocketMiddleware as apiMiddleware } from './api';
+import { apiMiddleware } from './api';
 
 function* rootSaga() {
   yield all(sagas);

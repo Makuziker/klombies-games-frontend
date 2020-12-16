@@ -1,9 +1,21 @@
 import { createAction } from '@reduxjs/toolkit';
 import { ACTION } from './constants';
-import { IJoinProps, INewMessageProps, IDiscardFromHandProps, IGoOutProps, ILayDownCardsProps } from '../../services/api';
+import {
+  IJoinProps,
+  INewMessageProps,
+  IDiscardFromHandProps,
+  IGoOutProps,
+  ILayDownCardsProps,
+  ISignUpProps,
+  ILoginProps
+} from '../../services';
 
 export const apiConnect = createAction(ACTION.CONNECT);
 export const apiDisconnect = createAction(ACTION.DISCONNECT);
+
+export const apiSignUp = createAction<ISignUpProps>(ACTION.SIGN_UP);
+export const apiLogin = createAction<ILoginProps>(ACTION.LOGIN);
+export const apiLogout = createAction(ACTION.LOGOUT);
 
 export const apiJoinRoom = createAction<IJoinProps>(ACTION.JOIN_ROOM);
 

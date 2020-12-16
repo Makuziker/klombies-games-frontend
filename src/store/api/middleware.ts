@@ -1,7 +1,7 @@
 import { Middleware } from '@reduxjs/toolkit';
 import { IApplicationState } from '../types';
 import { ACTION } from './constants';
-import * as Api from '../../services/api';
+import * as Api from '../../services';
 
 /**
  * This will listen for any actions fired within redux, if any match the cases below
@@ -10,13 +10,22 @@ import * as Api from '../../services/api';
  *
  * @param store Application store
  */
-export const SocketMiddleware: Middleware<{}, IApplicationState> = store => next => action => {
+export const apiMiddleware: Middleware<{}, IApplicationState> = store => next => action => {
   switch (action.type) {
     case ACTION.CONNECT:
       Api.connect();
       break;
     case ACTION.DISCONNECT:
       Api.disconnect();
+      break;
+    case ACTION.SIGN_UP:
+      Api.signUp(action.payload, store);
+      break;
+    case ACTION.LOGIN:
+      Api.login(action.payload, store);
+      break;
+    case ACTION.LOGOUT:
+      Api.logout();
       break;
     case ACTION.JOIN_ROOM:
       Api.join(action.payload);

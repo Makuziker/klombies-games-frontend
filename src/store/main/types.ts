@@ -1,3 +1,4 @@
+import { CognitoUserSession, ISignUpResult } from 'amazon-cognito-identity-js';
 import { IUser, IMessage } from '../../types';
 
 export interface IMainState {
@@ -5,6 +6,16 @@ export interface IMainState {
   roomCode: string;
   usersInRoom: IUser[];
   messages: IMessage[];
+  isAuthenticated: boolean;
+  userSignedUp: boolean;
+}
+
+export interface IUserLoggedInData {
+  data: CognitoUserSession;
+}
+
+export interface IUserSignedUpData {
+  data: ISignUpResult;
 }
 
 // Matches `backend/src/socket/types.ts`

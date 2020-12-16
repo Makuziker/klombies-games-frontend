@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createSelector, createAction } from '@redux
 import { useMemo } from 'react';
 
 import { STATE_KEY_MAIN } from '../constants';
-import { ICurrentUserJoinRoomData, IUsersInRoomData, IMainState, IMessageData } from './types';
+import { IUserLoggedInData, IUserSignedUpData, ICurrentUserJoinRoomData, IUsersInRoomData, IMainState, IMessageData } from './types';
 import { IUser, IMessage } from '../../types';
 import { socket } from '../../constants';
 
@@ -12,35 +12,41 @@ const initialState: IMainState = {
   displayName: '',
   roomCode: '',
   usersInRoom: [],
-  messages: []
+  messages: [],
+  isAuthenticated: false,
+  userSignedUp: false,
 };
 
 // Selectors
 const sliceSelector = (state: MAIN_STATE_SLICE) => state[STATE_KEY_MAIN];
 
-export const selectDisplayName = () => createSelector(sliceSelector, ({ displayName }) => displayName);
-export const selectRoomCode = () => createSelector(sliceSelector, ({ roomCode }) => roomCode);
-export const selectUsersInRoom = () => createSelector(sliceSelector, ({ usersInRoom }) => usersInRoom);
+export const selectIsAuthenticated = () => createSelector(sliceSelector, ({ isAuthenticated}) => isAuthenticated);
+export const selectUserSignedUp = () => createSelector(sliceSelector, ({ userSignedUp }) => userSignedUp);
 export const selectNumUsersInRoom = () => createSelector(sliceSelector, ({ usersInRoom }) => usersInRoom.length);
+export const selectDisplayName = () => createSelector(sliceSelector, ({ displayName }) => displayName);
+export const selectUsersInRoom = () => createSelector(sliceSelector, ({ usersInRoom }) => usersInRoom);
+export const selectRoomCode = () => createSelector(sliceSelector, ({ roomCode }) => roomCode);
 export const selectMessages = () => createSelector(sliceSelector, ({ messages }) => messages);
 export const selectCurrentUser = () => createSelector(sliceSelector, ({ usersInRoom }) => {
   return usersInRoom.find(u => u.id === socket.id);
 });
 
 export const useMainSelectors = () => ({
-  selectDisplayName: useMemo(selectDisplayName, []),
-  selectRoomCode: useMemo(selectRoomCode, []),
-  selectUsersInRoom: useMemo(selectUsersInRoom, []),
+  selectIsAuthenticated: useMemo(selectIsAuthenticated, []),
   selectNumUsersInRoom: useMemo(selectNumUsersInRoom, []),
+  selectDisplayName: useMemo(selectDisplayName, []),
+  selectUsersInRoom: useMemo(selectUsersInRoom, []),
+  selectCurrentUser: useMemo(selectCurrentUser, []),
+  selectRoomCode: useMemo(selectRoomCode, []),
   selectMessages: useMemo(selectMessages, []),
-  selectCurrentUser: useMemo(selectCurrentUser, [])
+  selectUserSignedUp: useMemo(selectUserSignedUp, []),
 });
 
 // Actions
 export const currentUserJoinRoom = createAction<ICurrentUserJoinRoomData>(`${STATE_KEY_MAIN}/currentUserJoinRoom`);
-
+export const userLoggedIn = createAction<IUserLoggedInData>(`${STATE_KEY_MAIN}/userLoggedIn`);
+export const userSignedUp = createAction<IUserSignedUpData>(`${STATE_KEY_MAIN}/userSignedUp`);
 export const usersInRoom = createAction<IUsersInRoomData>(`${STATE_KEY_MAIN}/usersInRoom`);
-
 export const addMessage = createAction<IMessageData>(`${STATE_KEY_MAIN}/addMessage`);
 
 // Slice
@@ -72,6 +78,18 @@ export const mainSlice = createSlice({
         ...state,
         messages
       };
+    },
+    setIsAuthenticated(state, { payload: isAuthenticated }: PayloadAction<boolean>) {
+      return {
+        ...state,
+        isAuthenticated
+      }
+    },
+    setUserSignedUp(state, { payload: userSignedUp }: PayloadAction<boolean>) {
+      return {
+        ...state,
+        userSignedUp
+      }
     }
   }
 });
@@ -81,6 +99,8 @@ export const {
   setDisplayName,
   setRoomCode,
   setUsersInRoom,
-  setMessages
+  setMessages,
+  setIsAuthenticated,
+  setUserSignedUp
 } = mainSlice.actions;
 export * from './types';
