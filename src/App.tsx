@@ -13,7 +13,7 @@ export default function App() {
     palette: {
       type: 'dark',
       primary: {
-        main: '#5332a2d4'
+        main: '#8e62fbb0'
       },
       secondary: {
         main: '#943e6ec7'

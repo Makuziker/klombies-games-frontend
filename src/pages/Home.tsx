@@ -18,7 +18,6 @@ export function HomePage() {
   const classes = useStyles();
   const [room, setRoom] = useState('');
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
   const routes = useRoute();
 
   const { selectDisplayName, selectRoomCode, selectIsAuthenticated } = useAppSelectors();
@@ -33,20 +32,22 @@ export function HomePage() {
 
   const handleSubmit = useCallback((e: FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     dispatch(apiJoinRoom({ room }));
   }, [dispatch, room]);
 
   const renderButtonLabel = useCallback(
-    () => loading ? <CircularProgress /> : 'Join Room',
+    () => loading ? <CircularProgress /> : 'Submit Room Code',
     [loading]
   );
 
   if (!isAuthenticated) return (<Redirect push to={routes.auth} />);
-  if (roomCode) return (<Redirect push to={routes.room({ id: roomCode, name: displayName })} />);
+  if (roomCode) return (<Redirect push to={routes.room({ id: roomCode })} />);
   return (
     <Grid container justify="center">
       <Grid item xs={12} sm={10} md={6} lg={4} xl={3}>
-        <Typography variant='h3' component='h3' align='center'>Hello ${displayName}. Create or Join a Room.</Typography>
+        <Typography variant='h3' component='h3' align='center'>{`Hello ${displayName}.`}</Typography>
+        <Typography variant='h4' component='h4' align='center'>Create or Join a Room.</Typography>
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
@@ -54,9 +55,6 @@ export function HomePage() {
             inputProps={{ maxLength: 20 }}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setRoom(e.target.value)}
           />
-          {errorMessage && (
-            <Typography color="error">{errorMessage}</Typography>
-          )}
           <Button
             className={classes.button}
             fullWidth

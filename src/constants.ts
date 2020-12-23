@@ -14,7 +14,7 @@ export const API_ENDPOINT = process.env.NODE_ENV === 'development'
   ? 'http://localhost:4000'
   : 'https://klombies-games-api.herokuapp.com/';
 
-export const socket = io(API_ENDPOINT);
+export const socket = io();
 
 export const COGNITO_POOL_DATA = {
   UserPoolId: 'us-east-2_58E81RfFZ',

@@ -43,7 +43,7 @@ export function RoomPage() {
   }, [dispatch]);
 
   return isGameInSession ? (
-    <Redirect push to={routes.game({ id: roomCode, name: displayName})} />
+    <Redirect push to={routes.game({ id: roomCode })} />
   ) : (
       <Container>
         <Grid container alignItems="center" direction="column">

@@ -17,7 +17,7 @@ export function signUp({ email, name, password }: ISignUpProps, store: Middlewar
       alert(err?.message || JSON.stringify(err));
     } else {
       console.log(data);
-      store.dispatch(userSignedUp({ data }));
+      store.dispatch(userSignedUp());
     }
   });
 }
@@ -36,7 +36,7 @@ export function login({ email, password }: ILoginProps, store: MiddlewareAPI) {
   cognitoUser.authenticateUser(authDetails, {
     onSuccess: data => {
       console.log('onSuccess', data);
-      store.dispatch(userLoggedIn({ data }));
+      store.dispatch(userLoggedIn({ displayName: data.getIdToken().payload.name }));
     },
     onFailure: err => {
       console.error(err);

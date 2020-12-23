@@ -15,7 +15,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
     getSession()
       .then(session => {
         if (session.isValid()) {
-          dispatch(userLoggedIn({ data: session }));
+          dispatch(userLoggedIn({ displayName: session.getIdToken().payload.name }));
         }
       })
   }, [dispatch]);

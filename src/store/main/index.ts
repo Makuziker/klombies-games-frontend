@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createSelector, createAction } from '@redux
 import { useMemo } from 'react';
 
 import { STATE_KEY_MAIN } from '../constants';
-import { IUserLoggedInData, IUserSignedUpData, ICurrentUserJoinRoomData, IUsersInRoomData, IMainState, IMessageData } from './types';
+import { IUserLoggedInData, ICurrentUserJoinRoomData, IUsersInRoomData, IMainState, IMessageData } from './types';
 import { IUser, IMessage } from '../../types';
 import { socket } from '../../constants';
 
@@ -34,18 +34,18 @@ export const selectCurrentUser = () => createSelector(sliceSelector, ({ usersInR
 export const useMainSelectors = () => ({
   selectIsAuthenticated: useMemo(selectIsAuthenticated, []),
   selectNumUsersInRoom: useMemo(selectNumUsersInRoom, []),
+  selectUserSignedUp: useMemo(selectUserSignedUp, []),
   selectDisplayName: useMemo(selectDisplayName, []),
   selectUsersInRoom: useMemo(selectUsersInRoom, []),
   selectCurrentUser: useMemo(selectCurrentUser, []),
   selectRoomCode: useMemo(selectRoomCode, []),
   selectMessages: useMemo(selectMessages, []),
-  selectUserSignedUp: useMemo(selectUserSignedUp, []),
 });
 
 // Actions
 export const currentUserJoinRoom = createAction<ICurrentUserJoinRoomData>(`${STATE_KEY_MAIN}/currentUserJoinRoom`);
 export const userLoggedIn = createAction<IUserLoggedInData>(`${STATE_KEY_MAIN}/userLoggedIn`);
-export const userSignedUp = createAction<IUserSignedUpData>(`${STATE_KEY_MAIN}/userSignedUp`);
+export const userSignedUp = createAction(`${STATE_KEY_MAIN}/userSignedUp`);
 export const usersInRoom = createAction<IUsersInRoomData>(`${STATE_KEY_MAIN}/usersInRoom`);
 export const addMessage = createAction<IMessageData>(`${STATE_KEY_MAIN}/addMessage`);
 

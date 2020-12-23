@@ -102,6 +102,7 @@ export function AuthPage() {
       <TextField
         fullWidth
         label="Email"
+        type="email"
         inputProps={{ maxLength: 30 }}
         onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
         value={email}
@@ -143,6 +144,7 @@ export function AuthPage() {
       <TextField
         fullWidth
         label="Email"
+        type="email"
         inputProps={{ maxLength: 30 }}
         onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
         value={email}

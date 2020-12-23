@@ -1,4 +1,3 @@
-import { CognitoUserSession, ISignUpResult } from 'amazon-cognito-identity-js';
 import { IUser, IMessage } from '../../types';
 
 export interface IMainState {
@@ -11,11 +10,7 @@ export interface IMainState {
 }
 
 export interface IUserLoggedInData {
-  data: CognitoUserSession;
-}
-
-export interface IUserSignedUpData {
-  data: ISignUpResult;
+  displayName: string;
 }
 
 // Matches `backend/src/socket/types.ts`
