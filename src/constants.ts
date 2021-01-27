@@ -17,8 +17,8 @@ export const API_ENDPOINT = process.env.NODE_ENV === 'development'
 export const socket = io();
 
 export const COGNITO_POOL_DATA = {
-  UserPoolId: 'us-east-2_58E81RfFZ',
-  ClientId: '4vuceq84nbc6ihkmjahq6iga1o'
+  UserPoolId: 'us-west-2_iIiQCj4r5',
+  ClientId: '678lnfd0q16bqe1f8oddr84n2l'
 };
 
 export const UserPool = new CognitoUserPool(COGNITO_POOL_DATA);
